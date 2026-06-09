@@ -57,13 +57,17 @@ export function Hero() {
           className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 px-4 animate-fade-up"
           style={{ animationDelay: "0.3s" }}
         >
-          <Button variant="hero" size="xl" className="w-full sm:w-auto group">
-            Join the Forge
-            <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-          </Button>
-          <Button variant="glass" size="xl" className="w-full sm:w-auto">
-            Explore Community
-          </Button>
+          <Link to={user ? "/" : "/auth"} className="w-full sm:w-auto">
+            <Button variant="hero" size="xl" className="w-full sm:w-auto group">
+              {user ? "Continue building" : "Join the Forge"}
+              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+            </Button>
+          </Link>
+          <a href="#members" className="w-full sm:w-auto">
+            <Button variant="glass" size="xl" className="w-full sm:w-auto">
+              Explore Community
+            </Button>
+          </a>
         </div>
 
         <div
@@ -72,10 +76,9 @@ export function Hero() {
         >
           <span className="flex items-center gap-2">
             <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
-            12,400+ active builders
+            {founders.toLocaleString()} {founders === 1 ? "founder" : "founders"} joined
           </span>
-          <span>⭐ 4.9 / 5 founder rating</span>
-          <span>🔥 38,200 streaks burning</span>
+          <span>🔥 {streaks.toLocaleString()} active {streaks === 1 ? "streak" : "streaks"}</span>
         </div>
       </div>
     </section>
