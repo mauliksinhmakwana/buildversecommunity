@@ -43,14 +43,9 @@ export function Navbar() {
           <div className="hidden md:flex items-center gap-2">
             {loading ? null : user ? (
               <>
-                <div className="flex items-center gap-2 pr-2">
-                  <div className="h-8 w-8 rounded-full gradient-primary flex items-center justify-center text-xs font-bold text-primary-foreground">
-                    {initials}
-                  </div>
-                  <span className="text-sm text-foreground max-w-[140px] truncate">
-                    {user.user_metadata?.display_name || user.email}
-                  </span>
-                </div>
+                <Button variant="hero" size="sm" onClick={() => navigate({ to: "/app/dashboard" })}>
+                  Open panel
+                </Button>
                 <Button variant="ghost" size="sm" onClick={signOut}>
                   <LogOut className="h-4 w-4" /> Sign out
                 </Button>
