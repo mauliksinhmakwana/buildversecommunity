@@ -17,11 +17,7 @@ export function Navbar() {
   const { user, signOut, loading } = useAuth();
   const navigate = useNavigate();
 
-  const initials = (user?.user_metadata?.display_name || user?.user_metadata?.full_name || user?.email || "?")
-    .toString()
-    .trim()
-    .slice(0, 2)
-    .toUpperCase();
+  void user;
 
   return (
     <header className="fixed top-0 inset-x-0 z-50">
@@ -43,14 +39,9 @@ export function Navbar() {
           <div className="hidden md:flex items-center gap-2">
             {loading ? null : user ? (
               <>
-                <div className="flex items-center gap-2 pr-2">
-                  <div className="h-8 w-8 rounded-full gradient-primary flex items-center justify-center text-xs font-bold text-primary-foreground">
-                    {initials}
-                  </div>
-                  <span className="text-sm text-foreground max-w-[140px] truncate">
-                    {user.user_metadata?.display_name || user.email}
-                  </span>
-                </div>
+                <Button variant="hero" size="sm" onClick={() => navigate({ to: "/app/dashboard" })}>
+                  Open panel
+                </Button>
                 <Button variant="ghost" size="sm" onClick={signOut}>
                   <LogOut className="h-4 w-4" /> Sign out
                 </Button>
