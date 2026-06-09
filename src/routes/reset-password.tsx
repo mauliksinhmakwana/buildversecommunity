@@ -1,6 +1,7 @@
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useState } from "react";
-import { Flame, Lock } from "lucide-react";
+import { Lock } from "lucide-react";
+import { Logo } from "@/components/Logo";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -32,7 +33,7 @@ function ResetPassword() {
     <main className="min-h-screen flex items-center justify-center px-4 py-12 bg-background">
       <div className="w-full max-w-md">
         <Link to="/" className="flex items-center justify-center gap-2 mb-8">
-          <Flame className="h-7 w-7 text-primary" />
+          <Logo size="lg" />
           <span className="font-display font-bold text-xl">
             Founder<span className="text-primary">Forge</span>
           </span>

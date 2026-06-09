@@ -1,6 +1,7 @@
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { Flame, Mail, Lock, User, ArrowRight } from "lucide-react";
+import { Mail, Lock, User, ArrowRight } from "lucide-react";
+import { Logo } from "@/components/Logo";
 import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable";
 import { useAuth } from "@/lib/auth-context";
@@ -87,10 +88,7 @@ function AuthPage() {
 
       <div className="w-full max-w-md">
         <Link to="/" className="flex items-center justify-center gap-2 mb-8 group">
-          <div className="relative">
-            <div className="absolute inset-0 bg-primary blur-md opacity-60 group-hover:opacity-100 transition-opacity" />
-            <Flame className="relative h-7 w-7 text-primary" />
-          </div>
+          <Logo size="lg" />
           <span className="font-display font-bold text-xl">
             Founder<span className="text-primary">Forge</span>
           </span>

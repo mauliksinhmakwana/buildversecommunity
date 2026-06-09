@@ -1,7 +1,8 @@
 import { useState } from "react";
-import { Flame, Menu, X, LogOut } from "lucide-react";
+import { Menu, X, LogOut } from "lucide-react";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
+import { Logo } from "@/components/Logo";
 import { useAuth } from "@/lib/auth-context";
 
 const links = [
@@ -27,10 +28,7 @@ export function Navbar() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-4">
         <nav className="glass-strong rounded-2xl px-4 sm:px-6 py-3 flex items-center justify-between shadow-elegant">
           <Link to="/" className="flex items-center gap-2 group">
-            <div className="relative">
-              <div className="absolute inset-0 bg-primary blur-md opacity-60 group-hover:opacity-100 transition-opacity" />
-              <Flame className="relative h-6 w-6 text-primary" />
-            </div>
+            <Logo size="md" />
             <span className="font-display font-bold text-lg tracking-tight">
               Founder<span className="text-primary">Forge</span>
             </span>
