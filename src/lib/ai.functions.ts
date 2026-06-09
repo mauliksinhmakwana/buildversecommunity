@@ -43,7 +43,5 @@ Idea: ${data.body}`;
     const { supabase, userId } = context;
     const { error } = await supabase.from("posts").update({ validation_score: score, validation_report: report }).eq("id", data.postId).eq("user_id", userId);
     if (error) throw error;
-    // Bonus XP for validating
-    await supabase.rpc as never;
     return { score, report };
   });
