@@ -29,6 +29,7 @@ function Onboarding() {
     if (!user) return;
     supabase.from("profiles").select("*").eq("id", user.id).maybeSingle().then(({ data }) => {
       if (!data) return;
+      const links = (data.links ?? {}) as Record<string, string>;
       setForm((f) => ({
         ...f,
         display_name: data.display_name ?? "",
@@ -40,11 +41,11 @@ function Onboarding() {
         looking_for: data.looking_for ?? [],
         location: data.location ?? "",
         avatar_url: data.avatar_url ?? "",
-        twitter: data.links?.twitter ?? "",
-        github: data.links?.github ?? "",
-        linkedin: data.links?.linkedin ?? "",
-        website: data.links?.website ?? "",
-        youtube: data.links?.youtube ?? "",
+        twitter: links.twitter ?? "",
+        github: links.github ?? "",
+        linkedin: links.linkedin ?? "",
+        website: links.website ?? "",
+        youtube: links.youtube ?? "",
         creator_enabled: !!data.creator_enabled,
       }));
     });
