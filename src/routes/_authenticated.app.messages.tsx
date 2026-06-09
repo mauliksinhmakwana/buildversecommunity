@@ -20,7 +20,8 @@ function Inbox() {
         .select("from_user, to_user, from_profile:from_user(display_name, avatar_url), to_profile:to_user(display_name, avatar_url)")
         .eq("status", "accepted")
         .or(`from_user.eq.${user.id},to_user.eq.${user.id}`);
-      const list: Match[] = ((data as never) ?? []).map((r: { from_user: string; to_user: string; from_profile: { display_name: string | null; avatar_url: string | null }; to_profile: { display_name: string | null; avatar_url: string | null } }) => {
+      const rows = ((data as unknown) as { from_user: string; to_user: string; from_profile: { display_name: string | null; avatar_url: string | null } | null; to_profile: { display_name: string | null; avatar_url: string | null } | null }[]) ?? [];
+      const list: Match[] = rows.map((r) => {
         const isFrom = r.from_user === user.id;
         return { other_id: isFrom ? r.to_user : r.from_user, display_name: (isFrom ? r.to_profile : r.from_profile)?.display_name ?? null, avatar_url: (isFrom ? r.to_profile : r.from_profile)?.avatar_url ?? null };
       });
