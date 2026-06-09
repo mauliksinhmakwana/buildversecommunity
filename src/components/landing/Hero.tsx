@@ -1,8 +1,18 @@
 import { ArrowRight, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Link } from "@tanstack/react-router";
+import { useQuery } from "@tanstack/react-query";
+import { useServerFn } from "@tanstack/react-start";
+import { getCommunityStats } from "@/lib/community.functions";
+import { useAuth } from "@/lib/auth-context";
 import heroBg from "@/assets/hero-bg.jpg";
 
 export function Hero() {
+  const fetchStats = useServerFn(getCommunityStats);
+  const { data } = useQuery({ queryKey: ["community-stats"], queryFn: () => fetchStats(), refetchInterval: 30_000 });
+  const { user } = useAuth();
+  const founders = data?.totalFounders ?? 0;
+  const streaks = data?.activeStreaks ?? 0;
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-28 pb-20">
       {/* Background layers */}
