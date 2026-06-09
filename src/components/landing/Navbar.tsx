@@ -17,11 +17,7 @@ export function Navbar() {
   const { user, signOut, loading } = useAuth();
   const navigate = useNavigate();
 
-  const initials = (user?.user_metadata?.display_name || user?.user_metadata?.full_name || user?.email || "?")
-    .toString()
-    .trim()
-    .slice(0, 2)
-    .toUpperCase();
+  void user;
 
   return (
     <header className="fixed top-0 inset-x-0 z-50">
