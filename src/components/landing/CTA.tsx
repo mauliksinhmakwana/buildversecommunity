@@ -1,5 +1,6 @@
-import { ArrowRight, Flame } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Logo } from "@/components/Logo";
 
 export function CTA() {
   return (
@@ -8,8 +9,8 @@ export function CTA() {
         <div className="relative glass-strong rounded-3xl p-10 sm:p-16 text-center overflow-hidden ember-bg shadow-elegant">
           <div className="absolute inset-0 grid-bg opacity-30" />
           <div className="relative">
-            <div className="inline-flex h-14 w-14 items-center justify-center rounded-2xl gradient-primary shadow-glow mb-6 animate-pulse-glow">
-              <Flame className="h-6 w-6 text-primary-foreground" />
+            <div className="inline-flex h-14 w-14 items-center justify-center mb-6 animate-pulse-glow rounded-full">
+              <Logo size="lg" />
             </div>
             <h2 className="font-display text-4xl sm:text-5xl md:text-6xl font-bold leading-tight">
               Your forge <span className="gradient-text">is waiting.</span>

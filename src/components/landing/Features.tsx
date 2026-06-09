@@ -1,9 +1,9 @@
 import {
-  Rocket, Users, Lightbulb, BookOpen, Trophy, Flame, Crown, Bell,
+  Rocket, Users, Lightbulb, BookOpen, Trophy, Zap, Crown, Bell,
 } from "lucide-react";
 
 const features = [
-  { icon: Flame, title: "Build In Public", desc: "Post daily updates, share wins, fail forward, and earn XP for showing up." },
+  { icon: Zap, title: "Build In Public", desc: "Post daily updates, share wins, fail forward, and earn XP for showing up." },
   { icon: Rocket, title: "Startup Showcase", desc: "Launch your SaaS, MVP, or idea to a community that actually upvotes and tests." },
   { icon: Users, title: "Co-Founder Matching", desc: "Find a technical, design, or growth partner with rich profile filters." },
   { icon: Lightbulb, title: "Startup Validator", desc: "Submit your idea, get a validation score, real feedback, and improvements." },

@@ -78,7 +78,7 @@ export function Hero() {
             <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
             {founders.toLocaleString()} {founders === 1 ? "founder" : "founders"} joined
           </span>
-          <span>🔥 {streaks.toLocaleString()} active {streaks === 1 ? "streak" : "streaks"}</span>
+          <span>⚡ {streaks.toLocaleString()} active {streaks === 1 ? "streak" : "streaks"}</span>
         </div>
       </div>
     </section>
