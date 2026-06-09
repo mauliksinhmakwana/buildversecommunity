@@ -53,7 +53,7 @@ function MemberCard({ m, rank, metric }: { m: Profile; rank: number; metric: "xp
           {m.xp.toLocaleString()} XP
         </span>
         <span className={`flex items-center gap-1.5 ${metric === "streak" ? "text-primary font-semibold" : "text-muted-foreground"}`}>
-          <Flame className="h-3.5 w-3.5 text-primary" />
+          <Zap className="h-3.5 w-3.5 text-primary" />
           {m.streak_days} day streak
         </span>
       </div>
@@ -125,7 +125,7 @@ export function FeaturedMembers() {
             <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-12">
               <div>
                 <div className="inline-flex items-center gap-2 glass rounded-full px-3 py-1 mb-4">
-                  <Flame className="h-3.5 w-3.5 text-primary" />
+                  <Zap className="h-3.5 w-3.5 text-primary" />
                   <span className="text-xs text-primary font-medium uppercase tracking-wider">Longest Streaks</span>
                 </div>
                 <h2 className="font-display text-3xl sm:text-4xl font-bold">
