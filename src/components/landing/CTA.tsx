@@ -1,6 +1,7 @@
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Logo } from "@/components/Logo";
+import { Link } from "react-router-dom";
 
 export function CTA() {
   return (
@@ -16,16 +17,15 @@ export function CTA() {
               Your forge <span className="gradient-text">is waiting.</span>
             </h2>
             <p className="mt-5 text-muted-foreground text-lg max-w-xl mx-auto">
-              Join 12,000+ founders shipping in public, validating ideas, and rising together.
+              Join 1000+ founders shipping in public, validating ideas, and rising together.
             </p>
             <div className="mt-9 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 px-4">
+             <Link to="/auth">
               <Button variant="hero" size="xl" className="w-full sm:w-auto group">
                 Create your account
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
               </Button>
-              <Button variant="glass" size="xl" className="w-full sm:w-auto">
-                Browse the community
-              </Button>
+             </Link>
             </div>
             <p className="mt-6 text-xs text-muted-foreground">
               Free to join · No credit card · Cancel anytime
