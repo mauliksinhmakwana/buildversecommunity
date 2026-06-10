@@ -26,7 +26,7 @@ function Inbox() {
       const otherIds = Array.from(new Set(rows.map((r) => r.from_user === user.id ? r.to_user : r.from_user)));
       if (otherIds.length === 0) { setMatches([]); setLoading(false); return; }
       const { data: ps } = await supabase.from("profiles").select("id, display_name, avatar_url").in("id", otherIds);
-      const pmap = new Map(((ps as Match[]) ?? []).map((p) => [p.id as unknown as string, p]));
+      const pmap = new Map(((ps as { id: string; display_name: string | null; avatar_url: string | null }[]) ?? []).map((p) => [p.id, p]));
       setMatches(otherIds.map((id) => ({
         other_id: id,
         display_name: pmap.get(id)?.display_name ?? "Unknown",

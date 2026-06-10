@@ -13,8 +13,8 @@ export const Route = createFileRoute("/_authenticated/app/feed")({
 });
 
 type Post = {
-  id: string; user_id: string; type: string; title: string | null; body: string;
-  image_url: string | null; tags: string[]; votes_count: number; comments_count: number;
+  id: string; user_id: string; type: "creator" | "idea" | "showcase" | "streak"; title: string | null; body: string;
+  media_urls: string[]; tags: string[]; votes_count: number; comments_count: number;
   created_at: string; repost_of: string | null;
 };
 type Prof = { id: string; display_name: string | null; avatar_url: string | null; roles: string[]; xp: number; streak_days: number };
@@ -30,7 +30,7 @@ function Feed() {
 
   async function load() {
     const { data } = await supabase.from("posts").select("*").order("created_at", { ascending: false }).limit(50);
-    const list = (data as Post[]) ?? [];
+    const list = ((data as unknown) as Post[]) ?? [];
     setPosts(list);
     const ids = Array.from(new Set(list.map((p) => p.user_id)));
     if (ids.length) {
