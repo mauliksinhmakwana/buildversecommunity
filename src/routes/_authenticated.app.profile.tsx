@@ -3,13 +3,15 @@ import { useEffect, useState } from "react";
 import { useAuth } from "@/lib/auth-context";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
-import { Pencil, MapPin, Trophy, Flame, Youtube } from "lucide-react";
+import { Switch } from "@/components/ui/switch";
+import { Pencil, MapPin, Trophy, Flame, Youtube, Eye, EyeOff } from "lucide-react";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/_authenticated/app/profile")({
   component: Profile,
 });
 
-type Prof = { id: string; display_name: string | null; avatar_url: string | null; bio: string | null; roles: string[]; skills: string[]; interests: string[]; looking_for: string[]; location: string | null; xp: number; streak_days: number; date_of_birth: string | null; creator_enabled: boolean; links: Record<string, string> };
+type Prof = { id: string; display_name: string | null; avatar_url: string | null; bio: string | null; roles: string[]; skills: string[]; interests: string[]; looking_for: string[]; location: string | null; xp: number; streak_days: number; date_of_birth: string | null; creator_enabled: boolean; cofounder_visible: boolean; links: Record<string, string> };
 
 function Profile() {
   const { user } = useAuth();
@@ -18,6 +20,15 @@ function Profile() {
     if (!user) return;
     supabase.from("profiles").select("*").eq("id", user.id).maybeSingle().then(({ data }) => setP(data as never));
   }, [user?.id]);
+
+  async function toggleVisible(v: boolean) {
+    if (!p || !user) return;
+    setP({ ...p, cofounder_visible: v });
+    const { error } = await supabase.from("profiles").update({ cofounder_visible: v }).eq("id", user.id);
+    if (error) { toast.error(error.message); setP({ ...p, cofounder_visible: !v }); }
+    else toast.success(v ? "Visible in Co-Founders" : "Hidden from Co-Founders");
+  }
+
   if (!p) return <div className="text-muted-foreground">Loading…</div>;
   const links = (p.links ?? {}) as Record<string, string>;
 
@@ -38,6 +49,17 @@ function Profile() {
           </div>
         </div>
         <Link to="/app/onboarding"><Button variant="glass" size="sm"><Pencil className="h-3.5 w-3.5" /> Edit</Button></Link>
+      </div>
+
+      <div className="glass-strong rounded-xl p-4 flex items-center justify-between gap-3">
+        <div className="flex items-start gap-3">
+          {p.cofounder_visible ? <Eye className="h-5 w-5 text-primary mt-0.5" /> : <EyeOff className="h-5 w-5 text-muted-foreground mt-0.5" />}
+          <div>
+            <div className="font-semibold text-sm">Show in Co-Founders</div>
+            <div className="text-xs text-muted-foreground">When off, your profile is hidden from the Co-Founders directory.</div>
+          </div>
+        </div>
+        <Switch checked={p.cofounder_visible} onCheckedChange={toggleVisible} />
       </div>
 
       {p.bio && <div className="glass-strong rounded-xl p-5"><p className="text-foreground/90 whitespace-pre-wrap">{p.bio}</p></div>}
