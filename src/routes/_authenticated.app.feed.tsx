@@ -102,7 +102,7 @@ function Feed() {
                 <span className="flex items-center gap-1 text-[11px] px-1.5 py-0.5 rounded-full bg-orange-500/15 text-orange-400"><Flame className="h-3 w-3" />{u?.streak_days ?? 0}</span>
               </div>
             </header>
-            {p.image_url && <img src={p.image_url} alt="" className="w-full max-h-96 object-cover" />}
+            {p.media_urls?.[0] && <img src={p.media_urls[0]} alt="" className="w-full max-h-96 object-cover" />}
             <div className="p-4 pt-3">
               <span className="text-[10px] uppercase tracking-wider text-primary">{p.type}{p.repost_of && " · repost"}</span>
               {p.title && <h3 className="font-semibold mt-1">{p.title}</h3>}
