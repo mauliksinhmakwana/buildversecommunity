@@ -7,6 +7,29 @@ const features = [
   { icon: Rocket, title: "Startup Showcase", desc: "Launch your SaaS, MVP, or idea to a community that actually upvotes and tests." },
   { icon: Users, title: "Co-Founder Matching", desc: "Find a technical, design, or growth partner with rich profile filters." },
   { icon: Lightbulb, title: "Startup Validator", desc: "Submit your idea, get a validation score, real feedback, and improvements." },
+  { 
+  icon: Target, 
+  title: "Founder Challenges", 
+  desc: "Join weekly and monthly challenges designed to push you from idea to execution." 
+},
+
+{ 
+  icon: Briefcase, 
+  title: "Build Teams", 
+  desc: "Turn ideas into startups by finding collaborators, specialists, and execution partners." 
+},
+
+{ 
+  icon: BarChart3, 
+  title: "Business Cases", 
+  desc: "Sharpen your thinking by solving real-world business, finance, and startup scenarios." 
+},
+
+{ 
+  icon: TrendingUp, 
+  title: "Founder Journey", 
+  desc: "Track your progress, milestones, streaks, and growth from idea to successful venture." 
+},
   { icon: BookOpen, title: "Founder Vault", desc: "A curated library of guides, AI tools, funding decks, and growth playbooks." },
   { icon: Trophy, title: "Leaderboard", desc: "Rise through XP, streaks, and contributions — weekly, monthly, all-time." },
   { icon: Crown, title: "Hall of Fame", desc: "The legends wall. Top builders and contributors immortalized." },
