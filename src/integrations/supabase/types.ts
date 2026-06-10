@@ -14,6 +14,136 @@ export type Database = {
   }
   public: {
     Tables: {
+      challenge_enrollments: {
+        Row: {
+          challenge_id: string
+          created_at: string
+          id: string
+          user_id: string
+        }
+        Insert: {
+          challenge_id: string
+          created_at?: string
+          id?: string
+          user_id: string
+        }
+        Update: {
+          challenge_id?: string
+          created_at?: string
+          id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "challenge_enrollments_challenge_id_fkey"
+            columns: ["challenge_id"]
+            isOneToOne: false
+            referencedRelation: "challenges"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      challenge_request_messages: {
+        Row: {
+          body: string
+          created_at: string
+          from_user: string
+          id: string
+          request_id: string
+        }
+        Insert: {
+          body: string
+          created_at?: string
+          from_user: string
+          id?: string
+          request_id: string
+        }
+        Update: {
+          body?: string
+          created_at?: string
+          from_user?: string
+          id?: string
+          request_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "challenge_request_messages_request_id_fkey"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "challenge_requests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      challenge_requests: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          status: string
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          status?: string
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          status?: string
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      challenges: {
+        Row: {
+          cover_url: string | null
+          created_at: string
+          created_by: string
+          description: string | null
+          ends_at: string | null
+          id: string
+          starts_at: string | null
+          status: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          cover_url?: string | null
+          created_at?: string
+          created_by: string
+          description?: string | null
+          ends_at?: string | null
+          id?: string
+          starts_at?: string | null
+          status?: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          cover_url?: string | null
+          created_at?: string
+          created_by?: string
+          description?: string | null
+          ends_at?: string | null
+          id?: string
+          starts_at?: string | null
+          status?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       cofounder_requests: {
         Row: {
           created_at: string
@@ -75,16 +205,19 @@ export type Database = {
         Row: {
           group_id: string
           joined_at: string
+          member_role: string
           user_id: string
         }
         Insert: {
           group_id: string
           joined_at?: string
+          member_role?: string
           user_id: string
         }
         Update: {
           group_id?: string
           joined_at?: string
+          member_role?: string
           user_id?: string
         }
         Relationships: [
@@ -137,27 +270,33 @@ export type Database = {
       }
       groups: {
         Row: {
+          cover_url: string | null
           created_at: string
           created_by: string | null
           description: string | null
           id: string
           image_url: string | null
+          is_pinned: boolean
           name: string
         }
         Insert: {
+          cover_url?: string | null
           created_at?: string
           created_by?: string | null
           description?: string | null
           id?: string
           image_url?: string | null
+          is_pinned?: boolean
           name: string
         }
         Update: {
+          cover_url?: string | null
           created_at?: string
           created_by?: string | null
           description?: string | null
           id?: string
           image_url?: string | null
+          is_pinned?: boolean
           name?: string
         }
         Relationships: []
@@ -263,6 +402,7 @@ export type Database = {
           created_at: string
           id: string
           media_urls: string[]
+          repost_of: string | null
           tags: string[]
           title: string | null
           type: Database["public"]["Enums"]["post_type"]
@@ -278,6 +418,7 @@ export type Database = {
           created_at?: string
           id?: string
           media_urls?: string[]
+          repost_of?: string | null
           tags?: string[]
           title?: string | null
           type: Database["public"]["Enums"]["post_type"]
@@ -293,6 +434,7 @@ export type Database = {
           created_at?: string
           id?: string
           media_urls?: string[]
+          repost_of?: string | null
           tags?: string[]
           title?: string | null
           type?: Database["public"]["Enums"]["post_type"]
@@ -302,12 +444,21 @@ export type Database = {
           validation_score?: number | null
           votes_count?: number
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "posts_repost_of_fkey"
+            columns: ["repost_of"]
+            isOneToOne: false
+            referencedRelation: "posts"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       profiles: {
         Row: {
           avatar_url: string | null
           bio: string | null
+          cofounder_visible: boolean
           created_at: string
           creator_enabled: boolean
           creator_platforms: Json
@@ -330,6 +481,7 @@ export type Database = {
         Insert: {
           avatar_url?: string | null
           bio?: string | null
+          cofounder_visible?: boolean
           created_at?: string
           creator_enabled?: boolean
           creator_platforms?: Json
@@ -352,6 +504,7 @@ export type Database = {
         Update: {
           avatar_url?: string | null
           bio?: string | null
+          cofounder_visible?: boolean
           created_at?: string
           creator_enabled?: boolean
           creator_platforms?: Json
