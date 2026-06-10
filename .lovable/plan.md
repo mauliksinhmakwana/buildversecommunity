@@ -1,107 +1,78 @@
+# Plan: Admin groups, bug fixes, Challenges, Feed, perf
 
-# FounderForge — Member Panel
+This is a large batch. I'll ship it in one pass, organized below.
 
-A full authenticated app at `/app/*` with a collapsible left sidebar, profile onboarding, and 9 feature modules. First signup becomes admin. Stays on the existing blue glassmorphism dark theme.
+## 1. Bug fixes (existing app)
 
-## 1. Database (one migration)
+- **Co-founder requests not visible / DMs not loading**: in `_authenticated.app.messages.tsx` the nested-select aliasing on `cofounder_requests` is fragile and silently returns empty. Switch to two simple queries: fetch requests where I'm sender or recipient + status `accepted`, then fetch profiles by `id IN (...)`. Same fix in `cofounders.requests.tsx`.
+- **Streak XP duplication**: trigger `posts_after_insert` adds 10 (post) + 20 (streak) = 30. Change so `type='streak'` posts award only 10 XP total.
+- **Streak posts mixed with ideas**: route streak posts to the existing "Today's update" composer on Dashboard. Remove "post streak" from Ideas page; Ideas shows only `type='idea'` posts with a top-right "Post Idea" button (matching Showcase pattern). Apply same pattern to Resources (top-right "Add Resource").
+- **Community chat won't open**: `community.tsx` "Open chat" links to `/app/community/$groupId`. Confirm route file naming + Link `params`. Likely cause: membership check requires row in `group_members` but join button doesn't insert for admin-created groups for the admin user. Fix join logic + ensure RLS allows member to read group_messages after join.
+- **Slow nav between sections**: every page does its own `supabase.from(...).select()` in `useEffect` with no caching. Wrap the existing app in `QueryClientProvider` (already in root) and convert page fetches to `useQuery` with `staleTime: 30s`. Prefetch profile/me once in shell and share via context.
 
-Extend `profiles` and add new tables. All public tables get GRANTs + RLS + policies. `app_role` enum + `user_roles` + `has_role()` security-definer function (per project rules — roles never live on profiles).
+## 2. Co-founder visibility toggle
 
-**Profiles — add columns:**
-`date_of_birth date`, `bio text`, `roles text[]` (multi: entrepreneur / creator / student / builder / investor), `skills text[]`, `interests text[]`, `looking_for text[]` (cofounder / collab / mentor / hire), `location text`, `links jsonb` (twitter, github, linkedin, website, youtube), `creator_enabled boolean`, `creator_platforms jsonb`, `onboarded boolean default false`.
+- Add `profiles.cofounder_visible boolean default true`.
+- Profile page: Switch to toggle it.
+- `cofounders.tsx` query: `.eq('cofounder_visible', true)`. Hide current user too.
 
-**New tables:**
-- `user_roles (user_id, role app_role)` — `admin` | `member`. Trigger: first row in `auth.users` → admin, all others → member.
-- `posts` — type enum (`showcase` | `idea` | `streak` | `creator`), title, body, media_urls[], tags[], user_id, validation_score (nullable), validation_report jsonb (nullable). Drives Showcase, Idea board, Streak feed, Creator feed (filtered by `type` + tags).
-- `post_votes`, `post_comments` — community voting on ideas + comments everywhere.
-- `streaks (user_id, current, longest, last_post_date)` — incremented by trigger on `posts` insert where type=streak.
-- `cofounder_requests (from_user, to_user, message, status)` — pending/accepted/declined. On accept → unlock DM.
-- `direct_messages (from_user, to_user, body, attachment_url, created_at)` — 1-1 DMs unlocked by accepted cofounder match.
-- `resources (title, description, url, file_path, category, posted_by, is_official)` — members post; admin posts flagged official.
-- `hall_of_fame (title, winner_user_id, challenge, built_thing, image_url, year)` — admin-only writes.
-- `groups (name, description, image_url, created_by)` — admin-only create.
-- `group_members (group_id, user_id)` — auto-join all members to default groups; admin manages.
-- `group_messages (group_id, user_id, body, attachment_url, attachment_type, created_at)` — realtime chat.
+## 3. Admin community group management
 
-**XP rules (trigger-based):** +10 per post, +5 per comment, +2 per vote received, +20 per streak day, +50 per validated idea. Leaderboard = `profiles` ordered by `xp` / `streak_days`.
+New admin UI on `/app/community` (admin-only section above member group list):
+- Create group (name, description, optional cover, `is_pinned`).
+- Rename / edit description / delete group.
+- Manage members: list, remove, promote (add `group_members.role` enum `member|moderator`).
+- Pin/unpin group (sorts first).
+- Moderate messages: delete any `group_messages` row.
 
-**Realtime:** enable on `group_messages`, `direct_messages`, `posts`, `cofounder_requests`.
+Migration: add `groups.is_pinned bool`, `groups.cover_url text`, `group_members.role text default 'member'`. Admin RLS already exists via `has_role`.
 
-**Storage buckets:** `avatars` (public), `post-media` (public), `resources` (public), `chat-attachments` (public), `hall-of-fame` (public).
+## 4. Challenges feature
 
-## 2. Auth + onboarding
+New tables:
+- `challenges`: title, description, cover_url, status (`upcoming|ongoing|past`), starts_at, ends_at, created_by (admin).
+- `challenge_enrollments`: challenge_id, user_id, unique.
+- `challenge_requests`: user_id, title, description, status (`pending|approved|rejected`), admin can respond.
+- `challenge_request_messages`: WhatsApp-style chat between requester and admin (text only). Realtime.
 
-- Update `handle_new_user` trigger: also assign `app_role` (first user = admin, else member), use Google `picture` for `avatar_url`.
-- Signup flow → redirect to `/app/onboarding` if `onboarded=false`. Required fields: name, DOB, avatar, roles (multi), skills, interests, looking_for. Optional: bio, location, links, creator toggle. On save → `onboarded=true` → `/app/dashboard`.
-- Profile is editable later at `/app/profile`.
+Routes:
+- `/app/challenges` — list cards grouped by status, top-right "Submit Challenge Idea" → modal. Enroll button on each; shows enrolled member avatars.
+- `/app/challenges/$id` — detail, enroll, enrolled list.
+- `/app/admin/challenges` — admin CRUD + inbox of requests with chat thread.
 
-## 3. Routes (TanStack file-based, all under `_authenticated`)
+Landing page: add Challenges section showing upcoming/ongoing; "Enroll" → redirect to `/auth`.
 
-```
-src/routes/_authenticated/
-  route.tsx              (integration-managed gate — already exists)
-  app.tsx                (sidebar layout shell, Outlet)
-  app.dashboard.tsx      (today's streak, recent posts, XP, quick actions)
-  app.profile.tsx        (view/edit own profile + creator section)
-  app.onboarding.tsx     (first-time profile wizard)
-  app.showcase.tsx       (feed with filter: type, tag, sort)
-  app.ideas.tsx          (post idea + AI validate button + community votes)
-  app.cofounders.tsx     (browse grid + filters + send request)
-  app.cofounders.requests.tsx  (incoming/outgoing requests)
-  app.messages.tsx       (DM inbox list)
-  app.messages.$userId.tsx     (1-1 thread, only if matched)
-  app.resources.tsx      (vault list + post form; admin official badge)
-  app.leaderboard.tsx    (XP rank + streak rank tabs)
-  app.hall.tsx           (Hall of Fame; admin edit controls)
-  app.community.tsx      (groups list + sidebar)
-  app.community.$groupId.tsx   (Instagram-style group chat)
-  app.admin.tsx          (admin-only: create groups, post hall of fame, mark official resources)
-```
+## 5. Feed section
 
-## 4. Sidebar shell (`app.tsx`)
+New route `/app/feed` (default landing after onboarding instead of dashboard).
+- Vertical Instagram-style feed of ALL posts (showcase + idea + streak + creator) newest first.
+- Card: avatar, name, role under name, XP + streak chips, post body, image (signed URL), like button (realtime via existing `post_votes`), comment count → expandable, repost button (creates new post with `repost_of` FK).
+- Realtime: subscribe to `posts` insert + `post_votes` changes for visible posts.
+- Add `posts.repost_of uuid` column.
 
-Uses shadcn Sidebar (`collapsible="icon"`) with `SidebarTrigger` in the top bar. Items: Dashboard, Showcase, Post Idea, Co-Founders, Messages, Community, Resources, Leaderboard, Hall of Fame, Profile, (Admin if role=admin), Sign out. Mobile: sidebar collapses to offcanvas + hamburger; desktop: persistent rail. Top bar shows XP + 🔥 streak badge + avatar.
+## 6. Landing page + header
 
-## 5. Feature implementation notes
+- `Navbar`: change to `backdrop-blur-xl bg-background/60` with semi-transparent menu. Show "Open Panel" button on mobile (currently hidden — add to mobile menu drawer too).
+- Add `<Challenges />` section between Features and CTA: pulls `challenges` where status in (upcoming, ongoing), public read policy. "Enroll" → `/auth?redirect=/app/challenges/{id}`.
 
-- **Showcase / Ideas / Creator feed** — same `posts` table, filtered by `type`. Card shows author avatar, title, body, media, tags, votes, comments. Filter pills + search.
-- **Idea Validator** — `validateIdea` server fn calls Lovable AI Gateway (`google/gemini-2.5-flash`) returning JSON `{score, strengths, risks, market, suggestions}`. Stored on post. Community can also upvote/comment.
-- **Co-founder matching** — grid of profiles filtered by role/skills/looking_for. "Connect" sends request with optional message. Recipient accepts in `app.cofounders.requests` → DM unlocked.
-- **Streak** — `app.dashboard` has "Post today's update" composer creating a `type=streak` post; trigger advances streak counter. Calendar heatmap shows last 30 days.
-- **Resource Vault** — list with category filter; member submission form; admin-posted resources get an "Official" gold badge.
-- **Leaderboard** — two tabs (XP, Streak), top-100, rank chips, current user highlight.
-- **Hall of Fame** — public-readable, admin-only write; card grid with image + winner + what they built.
-- **Community chat** — Realtime subscription on `group_messages` filtered by `group_id`. Composer supports text + image + file (uploaded to `chat-attachments`). Each message shows avatar + display name + timestamp, Instagram-style (own messages right-aligned in primary tint, others left-aligned glass).
+## 7. Perf
 
-## 6. Security
+- Move data fetching to `@tanstack/react-query` for all panel pages.
+- Memoize sidebar; avoid re-render storm from `useRouterState` selecting full pathname (already selecting just pathname — fine).
+- Use signed URLs cached in a single `signedUrl` map (react-query keyed on path).
+- Lazy-load heavy routes via existing TanStack code splitting (automatic for file routes — already on).
 
-- RLS on every table. `has_role(auth.uid(), 'admin')` gates admin writes on `hall_of_fame`, `groups`, official resources.
-- Group messages: only members of group can read/write (subquery against `group_members`).
-- DMs: only sender/recipient can read; only allowed if an accepted `cofounder_requests` row exists between them.
-- Profiles publicly readable (already is); updates restricted to owner.
-- Storage policies: authenticated upload, public read for media buckets.
+## Technical notes
 
-## 7. Technical notes
+- One migration covering: `cofounder_visible`, `groups.is_pinned/cover_url`, `group_members.role`, challenges tables, `posts.repost_of`, fixed `posts_after_insert` trigger, public-read policy on `challenges` (anon SELECT where status != 'past').
+- All new tables get GRANTs + RLS per project rules.
+- Realtime: `ALTER PUBLICATION supabase_realtime ADD TABLE challenges, challenge_enrollments, challenge_request_messages, posts, post_votes`.
 
-- Server fns for: `validateIdea` (AI), `sendCofounderRequest`, `respondCofounderRequest`, `sendDM`, `sendGroupMessage`, `postUpdate`, `upvotePost`, `commentPost`, `uploadAvatar`. All use `requireSupabaseAuth`.
-- Confirm `attachSupabaseAuth` is in `src/start.ts` (already is from prior auth setup).
-- Realtime subscriptions in browser via `supabase.channel(...)`.
-- Zod validation on all server-fn inputs (length caps, URL format, allowed enums).
-- No new env vars needed — `LOVABLE_API_KEY` already present for AI.
+## Out of scope (will not do this turn)
 
-## 8. Out of scope (this iteration)
-
-- Email notifications for requests/DMs.
-- Push notifications.
+- Push/email notifications for challenge approvals.
+- Video posts/feed.
+- Story-style ephemeral content.
 - Group voice/video.
-- Admin moderation queue (admin can still delete via DB).
 
-## 9. Deliverables checklist
-
-- 1 migration (schema + RLS + GRANTs + triggers + realtime + first-admin trigger).
-- 5 storage buckets via storage tool.
-- ~16 route files + sidebar shell + onboarding wizard.
-- Profile component (view + edit + creator section).
-- Reusable PostCard, PostComposer, ProfileCard, ChatMessage, FilterBar.
-- Server fns + AI validator.
-- Landing page unchanged; "Join the Forge" routes to `/auth` → onboarding → `/app/dashboard`.
+Ready to implement on approval.
