@@ -12,27 +12,36 @@ type Match = { other_id: string; display_name: string | null; avatar_url: string
 function Inbox() {
   const { user } = useAuth();
   const [matches, setMatches] = useState<Match[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (!user) return;
     (async () => {
+      setLoading(true);
       const { data } = await supabase.from("cofounder_requests")
-        .select("from_user, to_user, from_profile:from_user(display_name, avatar_url), to_profile:to_user(display_name, avatar_url)")
+        .select("from_user, to_user")
         .eq("status", "accepted")
         .or(`from_user.eq.${user.id},to_user.eq.${user.id}`);
-      const rows = ((data as unknown) as { from_user: string; to_user: string; from_profile: { display_name: string | null; avatar_url: string | null } | null; to_profile: { display_name: string | null; avatar_url: string | null } | null }[]) ?? [];
-      const list: Match[] = rows.map((r) => {
-        const isFrom = r.from_user === user.id;
-        return { other_id: isFrom ? r.to_user : r.from_user, display_name: (isFrom ? r.to_profile : r.from_profile)?.display_name ?? null, avatar_url: (isFrom ? r.to_profile : r.from_profile)?.avatar_url ?? null };
-      });
-      setMatches(list);
+      const rows = ((data as { from_user: string; to_user: string }[]) ?? []);
+      const otherIds = Array.from(new Set(rows.map((r) => r.from_user === user.id ? r.to_user : r.from_user)));
+      if (otherIds.length === 0) { setMatches([]); setLoading(false); return; }
+      const { data: ps } = await supabase.from("profiles").select("id, display_name, avatar_url").in("id", otherIds);
+      const pmap = new Map(((ps as { id: string; display_name: string | null; avatar_url: string | null }[]) ?? []).map((p) => [p.id, p]));
+      setMatches(otherIds.map((id) => ({
+        other_id: id,
+        display_name: pmap.get(id)?.display_name ?? "Unknown",
+        avatar_url: pmap.get(id)?.avatar_url ?? null,
+      })));
+      setLoading(false);
     })();
   }, [user?.id]);
 
   return (
     <div className="space-y-4">
       <h1 className="font-display text-3xl font-bold">Messages</h1>
-      {matches.length === 0 ? (
+      {loading ? (
+        <p className="text-sm text-muted-foreground">Loading…</p>
+      ) : matches.length === 0 ? (
         <p className="text-sm text-muted-foreground">Match with a co-founder first to start a chat. <Link to="/app/cofounders" className="text-primary hover:underline">Browse founders →</Link></p>
       ) : (
         <div className="space-y-2">

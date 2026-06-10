@@ -22,13 +22,18 @@ import { Route as AuthenticatedAppMessagesRouteImport } from './routes/_authenti
 import { Route as AuthenticatedAppLeaderboardRouteImport } from './routes/_authenticated.app.leaderboard'
 import { Route as AuthenticatedAppIdeasRouteImport } from './routes/_authenticated.app.ideas'
 import { Route as AuthenticatedAppHallRouteImport } from './routes/_authenticated.app.hall'
+import { Route as AuthenticatedAppFeedRouteImport } from './routes/_authenticated.app.feed'
 import { Route as AuthenticatedAppDashboardRouteImport } from './routes/_authenticated.app.dashboard'
 import { Route as AuthenticatedAppCommunityRouteImport } from './routes/_authenticated.app.community'
 import { Route as AuthenticatedAppCofoundersRouteImport } from './routes/_authenticated.app.cofounders'
+import { Route as AuthenticatedAppChallengesRouteImport } from './routes/_authenticated.app.challenges'
 import { Route as AuthenticatedAppAdminRouteImport } from './routes/_authenticated.app.admin'
 import { Route as AuthenticatedAppMessagesUserIdRouteImport } from './routes/_authenticated.app.messages.$userId'
 import { Route as AuthenticatedAppCommunityGroupIdRouteImport } from './routes/_authenticated.app.community.$groupId'
 import { Route as AuthenticatedAppCofoundersRequestsRouteImport } from './routes/_authenticated.app.cofounders.requests'
+import { Route as AuthenticatedAppChallengesRequestsRouteImport } from './routes/_authenticated.app.challenges.requests'
+import { Route as AuthenticatedAppChallengesIdRouteImport } from './routes/_authenticated.app.challenges.$id'
+import { Route as AuthenticatedAppAdminChallengesRouteImport } from './routes/_authenticated.app.admin.challenges'
 
 const ResetPasswordRoute = ResetPasswordRouteImport.update({
   id: '/reset-password',
@@ -99,6 +104,11 @@ const AuthenticatedAppHallRoute = AuthenticatedAppHallRouteImport.update({
   path: '/hall',
   getParentRoute: () => AuthenticatedAppRoute,
 } as any)
+const AuthenticatedAppFeedRoute = AuthenticatedAppFeedRouteImport.update({
+  id: '/feed',
+  path: '/feed',
+  getParentRoute: () => AuthenticatedAppRoute,
+} as any)
 const AuthenticatedAppDashboardRoute =
   AuthenticatedAppDashboardRouteImport.update({
     id: '/dashboard',
@@ -115,6 +125,12 @@ const AuthenticatedAppCofoundersRoute =
   AuthenticatedAppCofoundersRouteImport.update({
     id: '/cofounders',
     path: '/cofounders',
+    getParentRoute: () => AuthenticatedAppRoute,
+  } as any)
+const AuthenticatedAppChallengesRoute =
+  AuthenticatedAppChallengesRouteImport.update({
+    id: '/challenges',
+    path: '/challenges',
     getParentRoute: () => AuthenticatedAppRoute,
   } as any)
 const AuthenticatedAppAdminRoute = AuthenticatedAppAdminRouteImport.update({
@@ -140,16 +156,36 @@ const AuthenticatedAppCofoundersRequestsRoute =
     path: '/requests',
     getParentRoute: () => AuthenticatedAppCofoundersRoute,
   } as any)
+const AuthenticatedAppChallengesRequestsRoute =
+  AuthenticatedAppChallengesRequestsRouteImport.update({
+    id: '/requests',
+    path: '/requests',
+    getParentRoute: () => AuthenticatedAppChallengesRoute,
+  } as any)
+const AuthenticatedAppChallengesIdRoute =
+  AuthenticatedAppChallengesIdRouteImport.update({
+    id: '/$id',
+    path: '/$id',
+    getParentRoute: () => AuthenticatedAppChallengesRoute,
+  } as any)
+const AuthenticatedAppAdminChallengesRoute =
+  AuthenticatedAppAdminChallengesRouteImport.update({
+    id: '/challenges',
+    path: '/challenges',
+    getParentRoute: () => AuthenticatedAppAdminRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/reset-password': typeof ResetPasswordRoute
   '/app': typeof AuthenticatedAppRouteWithChildren
-  '/app/admin': typeof AuthenticatedAppAdminRoute
+  '/app/admin': typeof AuthenticatedAppAdminRouteWithChildren
+  '/app/challenges': typeof AuthenticatedAppChallengesRouteWithChildren
   '/app/cofounders': typeof AuthenticatedAppCofoundersRouteWithChildren
   '/app/community': typeof AuthenticatedAppCommunityRouteWithChildren
   '/app/dashboard': typeof AuthenticatedAppDashboardRoute
+  '/app/feed': typeof AuthenticatedAppFeedRoute
   '/app/hall': typeof AuthenticatedAppHallRoute
   '/app/ideas': typeof AuthenticatedAppIdeasRoute
   '/app/leaderboard': typeof AuthenticatedAppLeaderboardRoute
@@ -158,6 +194,9 @@ export interface FileRoutesByFullPath {
   '/app/profile': typeof AuthenticatedAppProfileRoute
   '/app/resources': typeof AuthenticatedAppResourcesRoute
   '/app/showcase': typeof AuthenticatedAppShowcaseRoute
+  '/app/admin/challenges': typeof AuthenticatedAppAdminChallengesRoute
+  '/app/challenges/$id': typeof AuthenticatedAppChallengesIdRoute
+  '/app/challenges/requests': typeof AuthenticatedAppChallengesRequestsRoute
   '/app/cofounders/requests': typeof AuthenticatedAppCofoundersRequestsRoute
   '/app/community/$groupId': typeof AuthenticatedAppCommunityGroupIdRoute
   '/app/messages/$userId': typeof AuthenticatedAppMessagesUserIdRoute
@@ -167,10 +206,12 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/reset-password': typeof ResetPasswordRoute
   '/app': typeof AuthenticatedAppRouteWithChildren
-  '/app/admin': typeof AuthenticatedAppAdminRoute
+  '/app/admin': typeof AuthenticatedAppAdminRouteWithChildren
+  '/app/challenges': typeof AuthenticatedAppChallengesRouteWithChildren
   '/app/cofounders': typeof AuthenticatedAppCofoundersRouteWithChildren
   '/app/community': typeof AuthenticatedAppCommunityRouteWithChildren
   '/app/dashboard': typeof AuthenticatedAppDashboardRoute
+  '/app/feed': typeof AuthenticatedAppFeedRoute
   '/app/hall': typeof AuthenticatedAppHallRoute
   '/app/ideas': typeof AuthenticatedAppIdeasRoute
   '/app/leaderboard': typeof AuthenticatedAppLeaderboardRoute
@@ -179,6 +220,9 @@ export interface FileRoutesByTo {
   '/app/profile': typeof AuthenticatedAppProfileRoute
   '/app/resources': typeof AuthenticatedAppResourcesRoute
   '/app/showcase': typeof AuthenticatedAppShowcaseRoute
+  '/app/admin/challenges': typeof AuthenticatedAppAdminChallengesRoute
+  '/app/challenges/$id': typeof AuthenticatedAppChallengesIdRoute
+  '/app/challenges/requests': typeof AuthenticatedAppChallengesRequestsRoute
   '/app/cofounders/requests': typeof AuthenticatedAppCofoundersRequestsRoute
   '/app/community/$groupId': typeof AuthenticatedAppCommunityGroupIdRoute
   '/app/messages/$userId': typeof AuthenticatedAppMessagesUserIdRoute
@@ -190,10 +234,12 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/reset-password': typeof ResetPasswordRoute
   '/_authenticated/app': typeof AuthenticatedAppRouteWithChildren
-  '/_authenticated/app/admin': typeof AuthenticatedAppAdminRoute
+  '/_authenticated/app/admin': typeof AuthenticatedAppAdminRouteWithChildren
+  '/_authenticated/app/challenges': typeof AuthenticatedAppChallengesRouteWithChildren
   '/_authenticated/app/cofounders': typeof AuthenticatedAppCofoundersRouteWithChildren
   '/_authenticated/app/community': typeof AuthenticatedAppCommunityRouteWithChildren
   '/_authenticated/app/dashboard': typeof AuthenticatedAppDashboardRoute
+  '/_authenticated/app/feed': typeof AuthenticatedAppFeedRoute
   '/_authenticated/app/hall': typeof AuthenticatedAppHallRoute
   '/_authenticated/app/ideas': typeof AuthenticatedAppIdeasRoute
   '/_authenticated/app/leaderboard': typeof AuthenticatedAppLeaderboardRoute
@@ -202,6 +248,9 @@ export interface FileRoutesById {
   '/_authenticated/app/profile': typeof AuthenticatedAppProfileRoute
   '/_authenticated/app/resources': typeof AuthenticatedAppResourcesRoute
   '/_authenticated/app/showcase': typeof AuthenticatedAppShowcaseRoute
+  '/_authenticated/app/admin/challenges': typeof AuthenticatedAppAdminChallengesRoute
+  '/_authenticated/app/challenges/$id': typeof AuthenticatedAppChallengesIdRoute
+  '/_authenticated/app/challenges/requests': typeof AuthenticatedAppChallengesRequestsRoute
   '/_authenticated/app/cofounders/requests': typeof AuthenticatedAppCofoundersRequestsRoute
   '/_authenticated/app/community/$groupId': typeof AuthenticatedAppCommunityGroupIdRoute
   '/_authenticated/app/messages/$userId': typeof AuthenticatedAppMessagesUserIdRoute
@@ -214,9 +263,11 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/app'
     | '/app/admin'
+    | '/app/challenges'
     | '/app/cofounders'
     | '/app/community'
     | '/app/dashboard'
+    | '/app/feed'
     | '/app/hall'
     | '/app/ideas'
     | '/app/leaderboard'
@@ -225,6 +276,9 @@ export interface FileRouteTypes {
     | '/app/profile'
     | '/app/resources'
     | '/app/showcase'
+    | '/app/admin/challenges'
+    | '/app/challenges/$id'
+    | '/app/challenges/requests'
     | '/app/cofounders/requests'
     | '/app/community/$groupId'
     | '/app/messages/$userId'
@@ -235,9 +289,11 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/app'
     | '/app/admin'
+    | '/app/challenges'
     | '/app/cofounders'
     | '/app/community'
     | '/app/dashboard'
+    | '/app/feed'
     | '/app/hall'
     | '/app/ideas'
     | '/app/leaderboard'
@@ -246,6 +302,9 @@ export interface FileRouteTypes {
     | '/app/profile'
     | '/app/resources'
     | '/app/showcase'
+    | '/app/admin/challenges'
+    | '/app/challenges/$id'
+    | '/app/challenges/requests'
     | '/app/cofounders/requests'
     | '/app/community/$groupId'
     | '/app/messages/$userId'
@@ -257,9 +316,11 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/_authenticated/app'
     | '/_authenticated/app/admin'
+    | '/_authenticated/app/challenges'
     | '/_authenticated/app/cofounders'
     | '/_authenticated/app/community'
     | '/_authenticated/app/dashboard'
+    | '/_authenticated/app/feed'
     | '/_authenticated/app/hall'
     | '/_authenticated/app/ideas'
     | '/_authenticated/app/leaderboard'
@@ -268,6 +329,9 @@ export interface FileRouteTypes {
     | '/_authenticated/app/profile'
     | '/_authenticated/app/resources'
     | '/_authenticated/app/showcase'
+    | '/_authenticated/app/admin/challenges'
+    | '/_authenticated/app/challenges/$id'
+    | '/_authenticated/app/challenges/requests'
     | '/_authenticated/app/cofounders/requests'
     | '/_authenticated/app/community/$groupId'
     | '/_authenticated/app/messages/$userId'
@@ -373,6 +437,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAppHallRouteImport
       parentRoute: typeof AuthenticatedAppRoute
     }
+    '/_authenticated/app/feed': {
+      id: '/_authenticated/app/feed'
+      path: '/feed'
+      fullPath: '/app/feed'
+      preLoaderRoute: typeof AuthenticatedAppFeedRouteImport
+      parentRoute: typeof AuthenticatedAppRoute
+    }
     '/_authenticated/app/dashboard': {
       id: '/_authenticated/app/dashboard'
       path: '/dashboard'
@@ -392,6 +463,13 @@ declare module '@tanstack/react-router' {
       path: '/cofounders'
       fullPath: '/app/cofounders'
       preLoaderRoute: typeof AuthenticatedAppCofoundersRouteImport
+      parentRoute: typeof AuthenticatedAppRoute
+    }
+    '/_authenticated/app/challenges': {
+      id: '/_authenticated/app/challenges'
+      path: '/challenges'
+      fullPath: '/app/challenges'
+      preLoaderRoute: typeof AuthenticatedAppChallengesRouteImport
       parentRoute: typeof AuthenticatedAppRoute
     }
     '/_authenticated/app/admin': {
@@ -422,8 +500,59 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAppCofoundersRequestsRouteImport
       parentRoute: typeof AuthenticatedAppCofoundersRoute
     }
+    '/_authenticated/app/challenges/requests': {
+      id: '/_authenticated/app/challenges/requests'
+      path: '/requests'
+      fullPath: '/app/challenges/requests'
+      preLoaderRoute: typeof AuthenticatedAppChallengesRequestsRouteImport
+      parentRoute: typeof AuthenticatedAppChallengesRoute
+    }
+    '/_authenticated/app/challenges/$id': {
+      id: '/_authenticated/app/challenges/$id'
+      path: '/$id'
+      fullPath: '/app/challenges/$id'
+      preLoaderRoute: typeof AuthenticatedAppChallengesIdRouteImport
+      parentRoute: typeof AuthenticatedAppChallengesRoute
+    }
+    '/_authenticated/app/admin/challenges': {
+      id: '/_authenticated/app/admin/challenges'
+      path: '/challenges'
+      fullPath: '/app/admin/challenges'
+      preLoaderRoute: typeof AuthenticatedAppAdminChallengesRouteImport
+      parentRoute: typeof AuthenticatedAppAdminRoute
+    }
   }
 }
+
+interface AuthenticatedAppAdminRouteChildren {
+  AuthenticatedAppAdminChallengesRoute: typeof AuthenticatedAppAdminChallengesRoute
+}
+
+const AuthenticatedAppAdminRouteChildren: AuthenticatedAppAdminRouteChildren = {
+  AuthenticatedAppAdminChallengesRoute: AuthenticatedAppAdminChallengesRoute,
+}
+
+const AuthenticatedAppAdminRouteWithChildren =
+  AuthenticatedAppAdminRoute._addFileChildren(
+    AuthenticatedAppAdminRouteChildren,
+  )
+
+interface AuthenticatedAppChallengesRouteChildren {
+  AuthenticatedAppChallengesIdRoute: typeof AuthenticatedAppChallengesIdRoute
+  AuthenticatedAppChallengesRequestsRoute: typeof AuthenticatedAppChallengesRequestsRoute
+}
+
+const AuthenticatedAppChallengesRouteChildren: AuthenticatedAppChallengesRouteChildren =
+  {
+    AuthenticatedAppChallengesIdRoute: AuthenticatedAppChallengesIdRoute,
+    AuthenticatedAppChallengesRequestsRoute:
+      AuthenticatedAppChallengesRequestsRoute,
+  }
+
+const AuthenticatedAppChallengesRouteWithChildren =
+  AuthenticatedAppChallengesRoute._addFileChildren(
+    AuthenticatedAppChallengesRouteChildren,
+  )
 
 interface AuthenticatedAppCofoundersRouteChildren {
   AuthenticatedAppCofoundersRequestsRoute: typeof AuthenticatedAppCofoundersRequestsRoute
@@ -470,10 +599,12 @@ const AuthenticatedAppMessagesRouteWithChildren =
   )
 
 interface AuthenticatedAppRouteChildren {
-  AuthenticatedAppAdminRoute: typeof AuthenticatedAppAdminRoute
+  AuthenticatedAppAdminRoute: typeof AuthenticatedAppAdminRouteWithChildren
+  AuthenticatedAppChallengesRoute: typeof AuthenticatedAppChallengesRouteWithChildren
   AuthenticatedAppCofoundersRoute: typeof AuthenticatedAppCofoundersRouteWithChildren
   AuthenticatedAppCommunityRoute: typeof AuthenticatedAppCommunityRouteWithChildren
   AuthenticatedAppDashboardRoute: typeof AuthenticatedAppDashboardRoute
+  AuthenticatedAppFeedRoute: typeof AuthenticatedAppFeedRoute
   AuthenticatedAppHallRoute: typeof AuthenticatedAppHallRoute
   AuthenticatedAppIdeasRoute: typeof AuthenticatedAppIdeasRoute
   AuthenticatedAppLeaderboardRoute: typeof AuthenticatedAppLeaderboardRoute
@@ -485,10 +616,12 @@ interface AuthenticatedAppRouteChildren {
 }
 
 const AuthenticatedAppRouteChildren: AuthenticatedAppRouteChildren = {
-  AuthenticatedAppAdminRoute: AuthenticatedAppAdminRoute,
+  AuthenticatedAppAdminRoute: AuthenticatedAppAdminRouteWithChildren,
+  AuthenticatedAppChallengesRoute: AuthenticatedAppChallengesRouteWithChildren,
   AuthenticatedAppCofoundersRoute: AuthenticatedAppCofoundersRouteWithChildren,
   AuthenticatedAppCommunityRoute: AuthenticatedAppCommunityRouteWithChildren,
   AuthenticatedAppDashboardRoute: AuthenticatedAppDashboardRoute,
+  AuthenticatedAppFeedRoute: AuthenticatedAppFeedRoute,
   AuthenticatedAppHallRoute: AuthenticatedAppHallRoute,
   AuthenticatedAppIdeasRoute: AuthenticatedAppIdeasRoute,
   AuthenticatedAppLeaderboardRoute: AuthenticatedAppLeaderboardRoute,

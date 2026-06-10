@@ -2,7 +2,7 @@ import { createFileRoute, Outlet, Link, useNavigate, useRouterState } from "@tan
 import { useEffect, useState } from "react";
 import {
   LayoutDashboard, User, Sparkles, Lightbulb, Users, MessageCircle, Hash,
-  BookOpen, Trophy, Award, Shield, LogOut, Menu, X, Flame, Zap
+  BookOpen, Trophy, Award, Shield, LogOut, Menu, X, Flame, Zap, Rss, Target
 } from "lucide-react";
 import { useAuth } from "@/lib/auth-context";
 import { useIsAdmin } from "@/lib/use-role";
@@ -17,8 +17,10 @@ export const Route = createFileRoute("/_authenticated/app")({
 
 const NAV = [
   { to: "/app/dashboard", label: "Dashboard", icon: LayoutDashboard },
+  { to: "/app/feed", label: "Feed", icon: Rss },
   { to: "/app/showcase", label: "Showcase", icon: Sparkles },
   { to: "/app/ideas", label: "Post Idea", icon: Lightbulb },
+  { to: "/app/challenges", label: "Challenges", icon: Target },
   { to: "/app/cofounders", label: "Co-Founders", icon: Users },
   { to: "/app/messages", label: "Messages", icon: MessageCircle },
   { to: "/app/community", label: "Community", icon: Hash },

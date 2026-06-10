@@ -27,7 +27,7 @@ function Cofounders() {
   const [message, setMessage] = useState("");
 
   async function load() {
-    let q = supabase.from("profiles").select("id, display_name, avatar_url, bio, roles, skills, looking_for, location, xp").eq("onboarded", true).order("xp", { ascending: false }).limit(60);
+    let q = supabase.from("profiles").select("id, display_name, avatar_url, bio, roles, skills, looking_for, location, xp").eq("onboarded", true).eq("cofounder_visible", true).order("xp", { ascending: false }).limit(60);
     if (user) q = q.neq("id", user.id);
     const { data } = await q;
     setMembers((data as never) ?? []);

@@ -8,6 +8,7 @@ import { HallOfFame } from "@/components/landing/HallOfFame";
 import { Testimonials } from "@/components/landing/Testimonials";
 import { CTA } from "@/components/landing/CTA";
 import { Footer } from "@/components/landing/Footer";
+import { Challenges } from "@/components/landing/Challenges";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -28,6 +29,7 @@ function Index() {
       <Hero />
       <Stats />
       <Features />
+      <Challenges />
       <FeaturedMembers />
       <HallOfFame />
       <Testimonials />
