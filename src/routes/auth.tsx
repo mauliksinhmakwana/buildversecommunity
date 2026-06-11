@@ -14,8 +14,8 @@ export const Route = createFileRoute("/auth")({
   ssr: false,
   head: () => ({
     meta: [
-      { title: "Sign in · FounderForge" },
-      { name: "description", content: "Sign in or create your FounderForge account to join the premium founder community." },
+      { title: "Sign in · BuildVerse" },
+      { name: "description", content: "Sign in or create your BuildVerse account to join the premium founder community." },
     ],
   }),
   component: AuthPage,
@@ -175,7 +175,7 @@ function AuthPage() {
           <div className="mt-6 text-center text-sm text-muted-foreground">
             {mode === "signin" && (
               <>
-                New to FounderForge?{" "}
+                New to BuildVerse?{" "}
                 <button onClick={() => setMode("signup")} className="text-primary hover:underline font-medium">
                   Create an account
                 </button>

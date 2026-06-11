@@ -23,10 +23,10 @@ export function Navbar() {
     <header className="fixed top-0 inset-x-0 z-50">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-4">
         <nav className="backdrop-blur-2xl bg-background/40 border border-border/40 rounded-2xl px-4 sm:px-6 py-3 flex items-center justify-between shadow-elegant">
-          <Link to="/" className="flex items-center gap-2 group">
+          <Link to="/" className="flex items-center gap-2">
             <Logo size="md" />
-            <span className="font-display font-bold text-lg tracking-tight">
-              Founder<span className="text-primary">Forge</span>
+            <span className="font-display font-bold text-lg tracking-tight text-foreground">
+              BuildVerse
             </span>
           </Link>
           <div className="hidden md:flex items-center gap-8">
@@ -52,7 +52,7 @@ export function Navbar() {
                   Sign in
                 </Button>
                 <Button variant="hero" size="sm" onClick={() => navigate({ to: "/auth" })}>
-                  Join the Forge
+                  Join BuildVerse
                 </Button>
               </>
             )}
@@ -84,7 +84,7 @@ export function Navbar() {
                     Sign in
                   </Button>
                   <Button variant="hero" size="sm" onClick={() => { setOpen(false); navigate({ to: "/auth" }); }}>
-                    Join the Forge
+                    Join BuildVerse
                   </Button>
                 </>
               )}

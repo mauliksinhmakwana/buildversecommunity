@@ -13,9 +13,9 @@ import { Challenges } from "@/components/landing/Challenges";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "FounderForge — Where Founders Are Forged" },
+      { title: "BuildVerse — Where Founders Are Forged" },
       { name: "description", content: "A premium community for founders, builders, creators, and innovators. Build in public, showcase startups, find co-founders, validate ideas, climb the leaderboard." },
-      { property: "og:title", content: "FounderForge — Where Founders Are Forged" },
+      { property: "og:title", content: "BuildVerse — Where Founders Are Forged" },
       { property: "og:description", content: "Premium founder community: build in public, startup showcase, co-founder matching, validation, XP & leaderboards." },
     ],
   }),

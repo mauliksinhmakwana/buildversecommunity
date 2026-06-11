@@ -5,7 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { getCommunityStats } from "@/lib/community.functions";
 import { useAuth } from "@/lib/auth-context";
-import heroBg from "@/assets/hero-bg.jpg";
+
 
 export function Hero() {
   const fetchStats = useServerFn(getCommunityStats);
@@ -15,56 +15,43 @@ export function Hero() {
   const streaks = data?.activeStreaks ?? 0;
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-28 pb-20">
-      {/* Background layers */}
-      <div className="absolute inset-0 -z-10">
-        <img
-          src={heroBg}
-          alt=""
-          width={1920}
-          height={1280}
-          className="absolute inset-0 w-full h-full object-cover opacity-70"
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-background/40 via-background/60 to-background" />
-        <div className="absolute inset-0 grid-bg opacity-50" />
-      </div>
-
       <div className="relative mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 text-center">
-        <div className="inline-flex items-center gap-2 glass rounded-full px-4 py-1.5 mb-8 animate-fade-up">
+        <div className="inline-flex items-center gap-2 border border-border rounded-full px-3 py-1 mb-8 animate-fade-up">
           <Sparkles className="h-3.5 w-3.5 text-primary" />
-          <span className="text-xs sm:text-sm text-muted-foreground">
-            Now welcoming founders from <span className="text-foreground font-medium">120+ countries</span>
+          <span className="text-xs text-muted-foreground">
+            Welcoming ambitious minds from <span className="text-foreground font-medium">120+ countries</span>
           </span>
         </div>
 
         <h1
-          className="font-display text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold leading-[1.05] tracking-tight animate-fade-up"
+          className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-semibold leading-[1.05] tracking-tight animate-fade-up text-foreground"
           style={{ animationDelay: "0.1s" }}
         >
-          Where Founders
+          The Universe of
           <br />
-          Are <span className="gradient-text">Forged.</span>
+          <span className="text-primary">Ambitious Minds.</span>
         </h1>
 
         <p
-          className="mt-6 text-base sm:text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto animate-fade-up"
+          className="mt-6 text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto animate-fade-up"
           style={{ animationDelay: "0.2s" }}
         >
-          A premium community for founders, builders, creators, and innovators.
-          Build in public, showcase startups, find your co-founder, and rise through the ranks.
+          A minimal, focused community for founders, builders, creators, and innovators.
+          Build in public, showcase startups, find your co-founder, and grow together.
         </p>
 
         <div
-          className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 px-4 animate-fade-up"
+          className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-3 px-4 animate-fade-up"
           style={{ animationDelay: "0.3s" }}
         >
           <Link to={user ? "/" : "/auth"} className="w-full sm:w-auto">
             <Button variant="hero" size="xl" className="w-full sm:w-auto group">
-              {user ? "Continue building" : "Join the Forge"}
+              {user ? "Continue building" : "Join BuildVerse"}
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
             </Button>
           </Link>
           <a href="#members" className="w-full sm:w-auto">
-            <Button variant="glass" size="xl" className="w-full sm:w-auto">
+            <Button variant="outline" size="xl" className="w-full sm:w-auto">
               Explore Community
             </Button>
           </a>
