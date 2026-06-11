@@ -1,5 +1,6 @@
 import {
   Rocket, Users, Lightbulb, BookOpen, Trophy, Zap, Crown, Bell,
+  Target, Briefcase, BarChart3, TrendingUp,
 } from "lucide-react";
 
 const features = [

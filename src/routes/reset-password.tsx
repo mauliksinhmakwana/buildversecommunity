@@ -10,7 +10,7 @@ import { toast } from "sonner";
 
 export const Route = createFileRoute("/reset-password")({
   ssr: false,
-  head: () => ({ meta: [{ title: "Reset password · FounderForge" }] }),
+  head: () => ({ meta: [{ title: "Reset password · BuildVerse" }] }),
   component: ResetPassword,
 });
 

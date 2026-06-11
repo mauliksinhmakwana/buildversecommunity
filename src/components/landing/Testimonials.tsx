@@ -1,6 +1,6 @@
 const testimonials = [
   {
-    quote: "FounderForge replaced three different communities for me. Build in public + co-founder matching in one place is unreal.",
+    quote: "BuildVerse replaced three different communities for me. Build in public + co-founder matching in one place is unreal.",
     name: "Jordan Reyes", role: "Founder, Plume AI", initials: "JR",
   },
   {
@@ -8,7 +8,7 @@ const testimonials = [
     name: "Anika Sharma", role: "Solo founder, Brightleaf", initials: "AS",
   },
   {
-    quote: "I found my technical co-founder here in 11 days. We launched our MVP two months later. The Forge is the real deal.",
+    quote: "I found my technical co-founder here in 11 days. We launched our MVP two months later. BuildVerse is the real deal.",
     name: "Tomás Herrera", role: "CEO, Mosaic Labs", initials: "TH",
   },
 ];
@@ -22,7 +22,7 @@ export function Testimonials() {
             <span className="text-xs text-primary font-medium uppercase tracking-wider">Testimonials</span>
           </div>
           <h2 className="font-display text-4xl sm:text-5xl font-bold">
-            Founders <span className="gradient-text">don't ship alone.</span>
+            Founders <span className="text-primary">don't ship alone.</span>
           </h2>
         </div>
 
