@@ -26,7 +26,7 @@ export function Navbar() {
           <Link to="/" className="flex items-center gap-2">
             <Logo size="md" />
             <span className="font-display font-bold text-lg tracking-tight text-foreground">
-              BuildVerse
+              Build<span className="text-primary">Verse</span>
             </span>
           </Link>
           <div className="hidden md:flex items-center gap-8">
