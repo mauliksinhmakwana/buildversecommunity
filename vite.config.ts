@@ -12,4 +12,8 @@ export default defineConfig({
     // nitro/vite builds from this
     server: { entry: "server" },
   },
+  // Outside Lovable's preview build (e.g. Vercel CI), Nitro emits a Vercel
+  // build using the `vercel` preset. Inside Lovable preview, this override
+  // is ignored and Cloudflare is used automatically.
+  nitro: { preset: "vercel" },
 });
