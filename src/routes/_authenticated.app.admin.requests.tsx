@@ -46,7 +46,7 @@ function AdminRequests() {
     const { error } = await supabase.from("challenge_requests").update({ status }).eq("id", id);
     if (error) toast.error(error.message); else { toast.success(status); load(); }
   }
-  async function setCoStatus(id: string, status: string) {
+  async function setCoStatus(id: string, status: "accepted" | "declined" | "pending") {
     const { error } = await supabase.from("cofounder_requests").update({ status }).eq("id", id);
     if (error) toast.error(error.message); else { toast.success(status); load(); }
   }
