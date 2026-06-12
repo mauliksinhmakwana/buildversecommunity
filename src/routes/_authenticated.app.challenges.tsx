@@ -85,12 +85,12 @@ function Challenges() {
               {c.ends_at && <span>Ends: {new Date(c.ends_at).toLocaleDateString()}</span>}
             </div>
             <div className="flex items-center justify-between mt-3">
-              <span className="text-xs flex items-center gap-1 text-muted-foreground"><Users className="h-3.5 w-3.5" />{counts[c.id] ?? 0} enrolled</span>
+              <span className="text-xs flex items-center gap-1 text-muted-foreground"><Users className="h-3.5 w-3.5" />{counts[c.id] ?? 0} participants</span>
               <div className="flex gap-2">
                 <Link to="/app/challenges/$id" params={{ id: c.id }}><Button size="sm" variant="ghost">View</Button></Link>
                 {c.status !== "past" && (
                   <Button size="sm" variant={enrolled.has(c.id) ? "glass" : "hero"} onClick={() => enroll(c.id)}>
-                    {enrolled.has(c.id) ? "Enrolled" : "Enroll"}
+                    {enrolled.has(c.id) ? "Joined ✓" : "Participate"}
                   </Button>
                 )}
               </div>

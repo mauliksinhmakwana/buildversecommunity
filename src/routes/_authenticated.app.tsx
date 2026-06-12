@@ -109,7 +109,7 @@ function SidebarInner({ items, pathname, signOut, onNavigate }: { items: readonl
       <div className="p-5 flex items-center justify-between border-b border-border">
         <Link to="/" onClick={onNavigate} className="flex items-center gap-2">
           <Logo size="md" />
-          <span className="font-display font-bold">Founder<span className="text-primary">Forge</span></span>
+          <span className="font-display font-bold">Build<span className="text-primary">Verse</span></span>
         </Link>
         {onNavigate && <button onClick={onNavigate}><X className="h-5 w-5" /></button>}
       </div>

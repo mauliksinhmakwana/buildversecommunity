@@ -34,8 +34,9 @@ function Admin() {
         <Stat label="Resources" v={counts.resources} />
       </div>
       <div className="grid sm:grid-cols-2 gap-3">
-        <Link to="/app/community" className="glass-strong rounded-xl p-4 hover:bg-card/70">Create community groups →</Link>
-        <Link to="/app/admin/challenges" className="glass-strong rounded-xl p-4 hover:bg-card/70">Manage challenges & requests →</Link>
+        <Link to="/app/community" className="glass-strong rounded-xl p-4 hover:bg-card/70">Create & moderate community groups →</Link>
+        <Link to="/app/admin/challenges" className="glass-strong rounded-xl p-4 hover:bg-card/70">Manage challenges →</Link>
+        <Link to="/app/admin/requests" className="glass-strong rounded-xl p-4 hover:bg-card/70">All user requests →</Link>
         <Link to="/app/hall" className="glass-strong rounded-xl p-4 hover:bg-card/70">Add Hall of Fame entries →</Link>
         <Link to="/app/resources" className="glass-strong rounded-xl p-4 hover:bg-card/70">Post official resources →</Link>
       </div>
