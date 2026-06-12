@@ -61,16 +61,17 @@ function ChallengeDetail() {
       </div>
       {c.description && <p className="text-foreground/90 whitespace-pre-wrap">{c.description}</p>}
       <div>
-        <h2 className="font-semibold flex items-center gap-2 mb-3"><Users className="h-4 w-4" />{members.length} enrolled</h2>
+        <h2 className="font-semibold flex items-center gap-2 mb-3"><Users className="h-4 w-4" />{members.length} participants</h2>
         <div className="flex flex-wrap gap-3">
           {members.map((m) => (
-            <div key={m.id} className="flex items-center gap-2 glass rounded-full px-3 py-1.5">
+            <Link key={m.id} to="/app/u/$userId" params={{ userId: m.id }} className="flex items-center gap-2 glass rounded-full px-3 py-1.5 hover:bg-card/70 transition">
               <div className="h-7 w-7 rounded-full gradient-primary flex items-center justify-center overflow-hidden text-[10px] font-bold">
                 {m.avatar_url ? <img src={m.avatar_url} alt="" className="h-full w-full object-cover" /> : (m.display_name ?? "?").slice(0,2).toUpperCase()}
               </div>
               <span className="text-sm">{m.display_name}</span>
-            </div>
+            </Link>
           ))}
+          {members.length === 0 && <p className="text-sm text-muted-foreground">No one has joined yet — be the first!</p>}
         </div>
       </div>
     </div>

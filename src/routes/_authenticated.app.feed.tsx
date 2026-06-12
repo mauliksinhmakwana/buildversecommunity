@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { useAuth } from "@/lib/auth-context";
 import { supabase } from "@/integrations/supabase/client";
@@ -90,13 +90,13 @@ function Feed() {
         return (
           <article key={p.id} className="glass-strong rounded-2xl overflow-hidden">
             <header className="flex items-center gap-3 p-4">
-              <div className="h-10 w-10 rounded-full gradient-primary flex items-center justify-center overflow-hidden text-xs font-bold flex-shrink-0">
+              <Link to="/app/u/$userId" params={{ userId: p.user_id }} className="h-10 w-10 rounded-full gradient-primary flex items-center justify-center overflow-hidden text-xs font-bold flex-shrink-0">
                 {u?.avatar_url ? <img src={u.avatar_url} alt="" className="h-full w-full object-cover" /> : (u?.display_name ?? "?").slice(0,2).toUpperCase()}
-              </div>
-              <div className="flex-1 min-w-0">
+              </Link>
+              <Link to="/app/u/$userId" params={{ userId: p.user_id }} className="flex-1 min-w-0 hover:opacity-80">
                 <div className="font-semibold text-sm">{u?.display_name ?? "User"}</div>
                 {role && <div className="text-[11px] text-muted-foreground capitalize">{role}</div>}
-              </div>
+              </Link>
               <div className="flex gap-1.5">
                 <span className="flex items-center gap-1 text-[11px] px-1.5 py-0.5 rounded-full bg-primary/15 text-primary"><Zap className="h-3 w-3" />{u?.xp ?? 0}</span>
                 <span className="flex items-center gap-1 text-[11px] px-1.5 py-0.5 rounded-full bg-orange-500/15 text-orange-400"><Flame className="h-3 w-3" />{u?.streak_days ?? 0}</span>
