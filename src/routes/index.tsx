@@ -25,6 +25,11 @@ export const Route = createFileRoute("/")({
 });
 
 function Index() {
+  const { user, loading } = useAuth();
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (!loading && user) navigate({ to: "/app/feed", replace: true });
+  }, [loading, user, navigate]);
   return (
     <main className="relative min-h-screen bg-background text-foreground overflow-x-hidden">
       <Navbar />
