@@ -91,6 +91,7 @@ function AppShell() {
             <div className="hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-orange-500/15 border border-orange-500/30">
               <Flame className="h-3.5 w-3.5 text-orange-400" /><span className="text-xs font-semibold">{me?.streak_days ?? 0}d</span>
             </div>
+            <NotificationsBell />
             <Link to="/app/profile" className="h-9 w-9 rounded-full gradient-primary flex items-center justify-center text-xs font-bold text-primary-foreground overflow-hidden">
               {me?.avatar_url ? <img src={me.avatar_url} className="h-full w-full object-cover" alt="" /> : initials}
             </Link>
