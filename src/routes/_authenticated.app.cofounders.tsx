@@ -86,9 +86,12 @@ function Cofounders() {
             <div className="flex flex-wrap gap-1 mt-3">
               {m.roles.slice(0,3).map((r) => <span key={r} className="text-[10px] uppercase tracking-wide px-1.5 py-0.5 rounded bg-primary/15 text-primary">{r}</span>)}
             </div>
-            <Button size="sm" variant={requested.has(m.id) ? "glass" : "hero"} className="w-full mt-4" disabled={requested.has(m.id)} onClick={() => setModal({ to: m.id, name: m.display_name ?? "this founder" })}>
-              <Send className="h-3.5 w-3.5" /> {requested.has(m.id) ? "Requested" : "Connect"}
-            </Button>
+            <div className="flex gap-2 mt-4">
+              <Button size="sm" variant={requested.has(m.id) ? "glass" : "hero"} className="flex-1" disabled={requested.has(m.id)} onClick={() => setModal({ to: m.id, name: m.display_name ?? "this founder" })}>
+                <Send className="h-3.5 w-3.5" /> {requested.has(m.id) ? "Requested" : "Connect"}
+              </Button>
+              <Link to="/app/messages/$userId" params={{ userId: m.id }}><Button size="sm" variant="glass">Message</Button></Link>
+            </div>
           </div>
         ))}
       </div>
