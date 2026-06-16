@@ -18,12 +18,24 @@ function Inbox() {
     if (!user) return;
     (async () => {
       setLoading(true);
-      const { data } = await supabase.from("cofounder_requests")
-        .select("from_user, to_user")
-        .eq("status", "accepted")
-        .or(`from_user.eq.${user.id},to_user.eq.${user.id}`);
-      const rows = ((data as { from_user: string; to_user: string }[]) ?? []);
-      const otherIds = Array.from(new Set(rows.map((r) => r.from_user === user.id ? r.to_user : r.from_user)));
+      const [{ data: reqs }, { data: dms }] = await Promise.all([
+        supabase.from("cofounder_requests")
+          .select("from_user, to_user")
+          .eq("status", "accepted")
+          .or(`from_user.eq.${user.id},to_user.eq.${user.id}`),
+        supabase.from("direct_messages")
+          .select("from_user, to_user, created_at")
+          .or(`from_user.eq.${user.id},to_user.eq.${user.id}`)
+          .order("created_at", { ascending: false }).limit(200),
+      ]);
+      const ids = new Set<string>();
+      ((reqs as { from_user: string; to_user: string }[]) ?? []).forEach((r) => {
+        ids.add(r.from_user === user.id ? r.to_user : r.from_user);
+      });
+      ((dms as { from_user: string; to_user: string }[]) ?? []).forEach((m) => {
+        ids.add(m.from_user === user.id ? m.to_user : m.from_user);
+      });
+      const otherIds = Array.from(ids);
       if (otherIds.length === 0) { setMatches([]); setLoading(false); return; }
       const { data: ps } = await supabase.from("profiles").select("id, display_name, avatar_url").in("id", otherIds);
       const pmap = new Map(((ps as { id: string; display_name: string | null; avatar_url: string | null }[]) ?? []).map((p) => [p.id, p]));
