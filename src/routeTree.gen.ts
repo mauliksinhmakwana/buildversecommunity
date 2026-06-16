@@ -14,6 +14,7 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedAppRouteImport } from './routes/_authenticated.app'
+import { Route as AuthenticatedAppIndexRouteImport } from './routes/_authenticated.app.index'
 import { Route as AuthenticatedAppShowcaseRouteImport } from './routes/_authenticated.app.showcase'
 import { Route as AuthenticatedAppResourcesRouteImport } from './routes/_authenticated.app.resources'
 import { Route as AuthenticatedAppProfileRouteImport } from './routes/_authenticated.app.profile'
@@ -60,6 +61,11 @@ const AuthenticatedAppRoute = AuthenticatedAppRouteImport.update({
   id: '/app',
   path: '/app',
   getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedAppIndexRoute = AuthenticatedAppIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AuthenticatedAppRoute,
 } as any)
 const AuthenticatedAppShowcaseRoute =
   AuthenticatedAppShowcaseRouteImport.update({
@@ -207,6 +213,7 @@ export interface FileRoutesByFullPath {
   '/app/profile': typeof AuthenticatedAppProfileRoute
   '/app/resources': typeof AuthenticatedAppResourcesRoute
   '/app/showcase': typeof AuthenticatedAppShowcaseRoute
+  '/app/': typeof AuthenticatedAppIndexRoute
   '/app/admin/challenges': typeof AuthenticatedAppAdminChallengesRoute
   '/app/admin/requests': typeof AuthenticatedAppAdminRequestsRoute
   '/app/challenges/$id': typeof AuthenticatedAppChallengesIdRoute
@@ -220,7 +227,6 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/reset-password': typeof ResetPasswordRoute
-  '/app': typeof AuthenticatedAppRouteWithChildren
   '/app/admin': typeof AuthenticatedAppAdminRouteWithChildren
   '/app/challenges': typeof AuthenticatedAppChallengesRouteWithChildren
   '/app/cofounders': typeof AuthenticatedAppCofoundersRouteWithChildren
@@ -235,6 +241,7 @@ export interface FileRoutesByTo {
   '/app/profile': typeof AuthenticatedAppProfileRoute
   '/app/resources': typeof AuthenticatedAppResourcesRoute
   '/app/showcase': typeof AuthenticatedAppShowcaseRoute
+  '/app': typeof AuthenticatedAppIndexRoute
   '/app/admin/challenges': typeof AuthenticatedAppAdminChallengesRoute
   '/app/admin/requests': typeof AuthenticatedAppAdminRequestsRoute
   '/app/challenges/$id': typeof AuthenticatedAppChallengesIdRoute
@@ -265,6 +272,7 @@ export interface FileRoutesById {
   '/_authenticated/app/profile': typeof AuthenticatedAppProfileRoute
   '/_authenticated/app/resources': typeof AuthenticatedAppResourcesRoute
   '/_authenticated/app/showcase': typeof AuthenticatedAppShowcaseRoute
+  '/_authenticated/app/': typeof AuthenticatedAppIndexRoute
   '/_authenticated/app/admin/challenges': typeof AuthenticatedAppAdminChallengesRoute
   '/_authenticated/app/admin/requests': typeof AuthenticatedAppAdminRequestsRoute
   '/_authenticated/app/challenges/$id': typeof AuthenticatedAppChallengesIdRoute
@@ -295,6 +303,7 @@ export interface FileRouteTypes {
     | '/app/profile'
     | '/app/resources'
     | '/app/showcase'
+    | '/app/'
     | '/app/admin/challenges'
     | '/app/admin/requests'
     | '/app/challenges/$id'
@@ -308,7 +317,6 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/reset-password'
-    | '/app'
     | '/app/admin'
     | '/app/challenges'
     | '/app/cofounders'
@@ -323,6 +331,7 @@ export interface FileRouteTypes {
     | '/app/profile'
     | '/app/resources'
     | '/app/showcase'
+    | '/app'
     | '/app/admin/challenges'
     | '/app/admin/requests'
     | '/app/challenges/$id'
@@ -352,6 +361,7 @@ export interface FileRouteTypes {
     | '/_authenticated/app/profile'
     | '/_authenticated/app/resources'
     | '/_authenticated/app/showcase'
+    | '/_authenticated/app/'
     | '/_authenticated/app/admin/challenges'
     | '/_authenticated/app/admin/requests'
     | '/_authenticated/app/challenges/$id'
@@ -405,6 +415,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/app'
       preLoaderRoute: typeof AuthenticatedAppRouteImport
       parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/app/': {
+      id: '/_authenticated/app/'
+      path: '/'
+      fullPath: '/app/'
+      preLoaderRoute: typeof AuthenticatedAppIndexRouteImport
+      parentRoute: typeof AuthenticatedAppRoute
     }
     '/_authenticated/app/showcase': {
       id: '/_authenticated/app/showcase'
@@ -654,6 +671,7 @@ interface AuthenticatedAppRouteChildren {
   AuthenticatedAppProfileRoute: typeof AuthenticatedAppProfileRoute
   AuthenticatedAppResourcesRoute: typeof AuthenticatedAppResourcesRoute
   AuthenticatedAppShowcaseRoute: typeof AuthenticatedAppShowcaseRoute
+  AuthenticatedAppIndexRoute: typeof AuthenticatedAppIndexRoute
   AuthenticatedAppUUserIdRoute: typeof AuthenticatedAppUUserIdRoute
 }
 
@@ -672,6 +690,7 @@ const AuthenticatedAppRouteChildren: AuthenticatedAppRouteChildren = {
   AuthenticatedAppProfileRoute: AuthenticatedAppProfileRoute,
   AuthenticatedAppResourcesRoute: AuthenticatedAppResourcesRoute,
   AuthenticatedAppShowcaseRoute: AuthenticatedAppShowcaseRoute,
+  AuthenticatedAppIndexRoute: AuthenticatedAppIndexRoute,
   AuthenticatedAppUUserIdRoute: AuthenticatedAppUUserIdRoute,
 }
 
