@@ -54,7 +54,7 @@ function Inbox() {
       {loading ? (
         <p className="text-sm text-muted-foreground">Loading…</p>
       ) : matches.length === 0 ? (
-        <p className="text-sm text-muted-foreground">Match with a co-founder first to start a chat. <Link to="/app/cofounders" className="text-primary hover:underline">Browse founders →</Link></p>
+        <p className="text-sm text-muted-foreground">No conversations yet. <Link to="/app/cofounders" className="text-primary hover:underline">Find people to message →</Link></p>
       ) : (
         <div className="space-y-2">
           {matches.map((m) => (
