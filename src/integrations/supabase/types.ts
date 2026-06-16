@@ -19,18 +19,30 @@ export type Database = {
           challenge_id: string
           created_at: string
           id: string
+          note: string | null
+          progress: number
+          status: string
+          updated_at: string
           user_id: string
         }
         Insert: {
           challenge_id: string
           created_at?: string
           id?: string
+          note?: string | null
+          progress?: number
+          status?: string
+          updated_at?: string
           user_id: string
         }
         Update: {
           challenge_id?: string
           created_at?: string
           id?: string
+          note?: string | null
+          progress?: number
+          status?: string
+          updated_at?: string
           user_id?: string
         }
         Relationships: [
@@ -334,6 +346,39 @@ export type Database = {
           winner_name?: string
           winner_user_id?: string | null
           year?: number | null
+        }
+        Relationships: []
+      }
+      notifications: {
+        Row: {
+          body: string | null
+          created_at: string
+          id: string
+          link: string | null
+          read: boolean
+          title: string
+          type: string
+          user_id: string
+        }
+        Insert: {
+          body?: string | null
+          created_at?: string
+          id?: string
+          link?: string | null
+          read?: boolean
+          title: string
+          type: string
+          user_id: string
+        }
+        Update: {
+          body?: string | null
+          created_at?: string
+          id?: string
+          link?: string | null
+          read?: boolean
+          title?: string
+          type?: string
+          user_id?: string
         }
         Relationships: []
       }
