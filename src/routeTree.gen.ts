@@ -29,6 +29,7 @@ import { Route as AuthenticatedAppCommunityRouteImport } from './routes/_authent
 import { Route as AuthenticatedAppCofoundersRouteImport } from './routes/_authenticated.app.cofounders'
 import { Route as AuthenticatedAppChallengesRouteImport } from './routes/_authenticated.app.challenges'
 import { Route as AuthenticatedAppAdminRouteImport } from './routes/_authenticated.app.admin'
+import { Route as AuthenticatedAppAdminIndexRouteImport } from './routes/_authenticated.app.admin.index'
 import { Route as AuthenticatedAppUUserIdRouteImport } from './routes/_authenticated.app.u.$userId'
 import { Route as AuthenticatedAppMessagesUserIdRouteImport } from './routes/_authenticated.app.messages.$userId'
 import { Route as AuthenticatedAppCommunityGroupIdRouteImport } from './routes/_authenticated.app.community.$groupId'
@@ -146,6 +147,12 @@ const AuthenticatedAppAdminRoute = AuthenticatedAppAdminRouteImport.update({
   path: '/admin',
   getParentRoute: () => AuthenticatedAppRoute,
 } as any)
+const AuthenticatedAppAdminIndexRoute =
+  AuthenticatedAppAdminIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => AuthenticatedAppAdminRoute,
+  } as any)
 const AuthenticatedAppUUserIdRoute = AuthenticatedAppUUserIdRouteImport.update({
   id: '/u/$userId',
   path: '/u/$userId',
@@ -222,12 +229,12 @@ export interface FileRoutesByFullPath {
   '/app/community/$groupId': typeof AuthenticatedAppCommunityGroupIdRoute
   '/app/messages/$userId': typeof AuthenticatedAppMessagesUserIdRoute
   '/app/u/$userId': typeof AuthenticatedAppUUserIdRoute
+  '/app/admin/': typeof AuthenticatedAppAdminIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/reset-password': typeof ResetPasswordRoute
-  '/app/admin': typeof AuthenticatedAppAdminRouteWithChildren
   '/app/challenges': typeof AuthenticatedAppChallengesRouteWithChildren
   '/app/cofounders': typeof AuthenticatedAppCofoundersRouteWithChildren
   '/app/community': typeof AuthenticatedAppCommunityRouteWithChildren
@@ -250,6 +257,7 @@ export interface FileRoutesByTo {
   '/app/community/$groupId': typeof AuthenticatedAppCommunityGroupIdRoute
   '/app/messages/$userId': typeof AuthenticatedAppMessagesUserIdRoute
   '/app/u/$userId': typeof AuthenticatedAppUUserIdRoute
+  '/app/admin': typeof AuthenticatedAppAdminIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -281,6 +289,7 @@ export interface FileRoutesById {
   '/_authenticated/app/community/$groupId': typeof AuthenticatedAppCommunityGroupIdRoute
   '/_authenticated/app/messages/$userId': typeof AuthenticatedAppMessagesUserIdRoute
   '/_authenticated/app/u/$userId': typeof AuthenticatedAppUUserIdRoute
+  '/_authenticated/app/admin/': typeof AuthenticatedAppAdminIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -312,12 +321,12 @@ export interface FileRouteTypes {
     | '/app/community/$groupId'
     | '/app/messages/$userId'
     | '/app/u/$userId'
+    | '/app/admin/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/auth'
     | '/reset-password'
-    | '/app/admin'
     | '/app/challenges'
     | '/app/cofounders'
     | '/app/community'
@@ -340,6 +349,7 @@ export interface FileRouteTypes {
     | '/app/community/$groupId'
     | '/app/messages/$userId'
     | '/app/u/$userId'
+    | '/app/admin'
   id:
     | '__root__'
     | '/'
@@ -370,6 +380,7 @@ export interface FileRouteTypes {
     | '/_authenticated/app/community/$groupId'
     | '/_authenticated/app/messages/$userId'
     | '/_authenticated/app/u/$userId'
+    | '/_authenticated/app/admin/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -521,6 +532,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAppAdminRouteImport
       parentRoute: typeof AuthenticatedAppRoute
     }
+    '/_authenticated/app/admin/': {
+      id: '/_authenticated/app/admin/'
+      path: '/'
+      fullPath: '/app/admin/'
+      preLoaderRoute: typeof AuthenticatedAppAdminIndexRouteImport
+      parentRoute: typeof AuthenticatedAppAdminRoute
+    }
     '/_authenticated/app/u/$userId': {
       id: '/_authenticated/app/u/$userId'
       path: '/u/$userId'
@@ -583,11 +601,13 @@ declare module '@tanstack/react-router' {
 interface AuthenticatedAppAdminRouteChildren {
   AuthenticatedAppAdminChallengesRoute: typeof AuthenticatedAppAdminChallengesRoute
   AuthenticatedAppAdminRequestsRoute: typeof AuthenticatedAppAdminRequestsRoute
+  AuthenticatedAppAdminIndexRoute: typeof AuthenticatedAppAdminIndexRoute
 }
 
 const AuthenticatedAppAdminRouteChildren: AuthenticatedAppAdminRouteChildren = {
   AuthenticatedAppAdminChallengesRoute: AuthenticatedAppAdminChallengesRoute,
   AuthenticatedAppAdminRequestsRoute: AuthenticatedAppAdminRequestsRoute,
+  AuthenticatedAppAdminIndexRoute: AuthenticatedAppAdminIndexRoute,
 }
 
 const AuthenticatedAppAdminRouteWithChildren =
@@ -718,13 +738,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
