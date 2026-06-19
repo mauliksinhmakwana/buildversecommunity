@@ -29,6 +29,8 @@ import { Route as AuthenticatedAppCommunityRouteImport } from './routes/_authent
 import { Route as AuthenticatedAppCofoundersRouteImport } from './routes/_authenticated.app.cofounders'
 import { Route as AuthenticatedAppChallengesRouteImport } from './routes/_authenticated.app.challenges'
 import { Route as AuthenticatedAppAdminRouteImport } from './routes/_authenticated.app.admin'
+import { Route as AuthenticatedAppMessagesIndexRouteImport } from './routes/_authenticated.app.messages.index'
+import { Route as AuthenticatedAppCommunityIndexRouteImport } from './routes/_authenticated.app.community.index'
 import { Route as AuthenticatedAppAdminIndexRouteImport } from './routes/_authenticated.app.admin.index'
 import { Route as AuthenticatedAppUUserIdRouteImport } from './routes/_authenticated.app.u.$userId'
 import { Route as AuthenticatedAppMessagesUserIdRouteImport } from './routes/_authenticated.app.messages.$userId'
@@ -147,6 +149,18 @@ const AuthenticatedAppAdminRoute = AuthenticatedAppAdminRouteImport.update({
   path: '/admin',
   getParentRoute: () => AuthenticatedAppRoute,
 } as any)
+const AuthenticatedAppMessagesIndexRoute =
+  AuthenticatedAppMessagesIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => AuthenticatedAppMessagesRoute,
+  } as any)
+const AuthenticatedAppCommunityIndexRoute =
+  AuthenticatedAppCommunityIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => AuthenticatedAppCommunityRoute,
+  } as any)
 const AuthenticatedAppAdminIndexRoute =
   AuthenticatedAppAdminIndexRouteImport.update({
     id: '/',
@@ -230,6 +244,8 @@ export interface FileRoutesByFullPath {
   '/app/messages/$userId': typeof AuthenticatedAppMessagesUserIdRoute
   '/app/u/$userId': typeof AuthenticatedAppUUserIdRoute
   '/app/admin/': typeof AuthenticatedAppAdminIndexRoute
+  '/app/community/': typeof AuthenticatedAppCommunityIndexRoute
+  '/app/messages/': typeof AuthenticatedAppMessagesIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -237,13 +253,11 @@ export interface FileRoutesByTo {
   '/reset-password': typeof ResetPasswordRoute
   '/app/challenges': typeof AuthenticatedAppChallengesRouteWithChildren
   '/app/cofounders': typeof AuthenticatedAppCofoundersRouteWithChildren
-  '/app/community': typeof AuthenticatedAppCommunityRouteWithChildren
   '/app/dashboard': typeof AuthenticatedAppDashboardRoute
   '/app/feed': typeof AuthenticatedAppFeedRoute
   '/app/hall': typeof AuthenticatedAppHallRoute
   '/app/ideas': typeof AuthenticatedAppIdeasRoute
   '/app/leaderboard': typeof AuthenticatedAppLeaderboardRoute
-  '/app/messages': typeof AuthenticatedAppMessagesRouteWithChildren
   '/app/onboarding': typeof AuthenticatedAppOnboardingRoute
   '/app/profile': typeof AuthenticatedAppProfileRoute
   '/app/resources': typeof AuthenticatedAppResourcesRoute
@@ -258,6 +272,8 @@ export interface FileRoutesByTo {
   '/app/messages/$userId': typeof AuthenticatedAppMessagesUserIdRoute
   '/app/u/$userId': typeof AuthenticatedAppUUserIdRoute
   '/app/admin': typeof AuthenticatedAppAdminIndexRoute
+  '/app/community': typeof AuthenticatedAppCommunityIndexRoute
+  '/app/messages': typeof AuthenticatedAppMessagesIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -290,6 +306,8 @@ export interface FileRoutesById {
   '/_authenticated/app/messages/$userId': typeof AuthenticatedAppMessagesUserIdRoute
   '/_authenticated/app/u/$userId': typeof AuthenticatedAppUUserIdRoute
   '/_authenticated/app/admin/': typeof AuthenticatedAppAdminIndexRoute
+  '/_authenticated/app/community/': typeof AuthenticatedAppCommunityIndexRoute
+  '/_authenticated/app/messages/': typeof AuthenticatedAppMessagesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -322,6 +340,8 @@ export interface FileRouteTypes {
     | '/app/messages/$userId'
     | '/app/u/$userId'
     | '/app/admin/'
+    | '/app/community/'
+    | '/app/messages/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -329,13 +349,11 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/app/challenges'
     | '/app/cofounders'
-    | '/app/community'
     | '/app/dashboard'
     | '/app/feed'
     | '/app/hall'
     | '/app/ideas'
     | '/app/leaderboard'
-    | '/app/messages'
     | '/app/onboarding'
     | '/app/profile'
     | '/app/resources'
@@ -350,6 +368,8 @@ export interface FileRouteTypes {
     | '/app/messages/$userId'
     | '/app/u/$userId'
     | '/app/admin'
+    | '/app/community'
+    | '/app/messages'
   id:
     | '__root__'
     | '/'
@@ -381,6 +401,8 @@ export interface FileRouteTypes {
     | '/_authenticated/app/messages/$userId'
     | '/_authenticated/app/u/$userId'
     | '/_authenticated/app/admin/'
+    | '/_authenticated/app/community/'
+    | '/_authenticated/app/messages/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -532,6 +554,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAppAdminRouteImport
       parentRoute: typeof AuthenticatedAppRoute
     }
+    '/_authenticated/app/messages/': {
+      id: '/_authenticated/app/messages/'
+      path: '/'
+      fullPath: '/app/messages/'
+      preLoaderRoute: typeof AuthenticatedAppMessagesIndexRouteImport
+      parentRoute: typeof AuthenticatedAppMessagesRoute
+    }
+    '/_authenticated/app/community/': {
+      id: '/_authenticated/app/community/'
+      path: '/'
+      fullPath: '/app/community/'
+      preLoaderRoute: typeof AuthenticatedAppCommunityIndexRouteImport
+      parentRoute: typeof AuthenticatedAppCommunityRoute
+    }
     '/_authenticated/app/admin/': {
       id: '/_authenticated/app/admin/'
       path: '/'
@@ -649,12 +685,14 @@ const AuthenticatedAppCofoundersRouteWithChildren =
 
 interface AuthenticatedAppCommunityRouteChildren {
   AuthenticatedAppCommunityGroupIdRoute: typeof AuthenticatedAppCommunityGroupIdRoute
+  AuthenticatedAppCommunityIndexRoute: typeof AuthenticatedAppCommunityIndexRoute
 }
 
 const AuthenticatedAppCommunityRouteChildren: AuthenticatedAppCommunityRouteChildren =
   {
     AuthenticatedAppCommunityGroupIdRoute:
       AuthenticatedAppCommunityGroupIdRoute,
+    AuthenticatedAppCommunityIndexRoute: AuthenticatedAppCommunityIndexRoute,
   }
 
 const AuthenticatedAppCommunityRouteWithChildren =
@@ -664,11 +702,13 @@ const AuthenticatedAppCommunityRouteWithChildren =
 
 interface AuthenticatedAppMessagesRouteChildren {
   AuthenticatedAppMessagesUserIdRoute: typeof AuthenticatedAppMessagesUserIdRoute
+  AuthenticatedAppMessagesIndexRoute: typeof AuthenticatedAppMessagesIndexRoute
 }
 
 const AuthenticatedAppMessagesRouteChildren: AuthenticatedAppMessagesRouteChildren =
   {
     AuthenticatedAppMessagesUserIdRoute: AuthenticatedAppMessagesUserIdRoute,
+    AuthenticatedAppMessagesIndexRoute: AuthenticatedAppMessagesIndexRoute,
   }
 
 const AuthenticatedAppMessagesRouteWithChildren =
