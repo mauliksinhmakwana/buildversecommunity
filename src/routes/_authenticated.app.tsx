@@ -17,7 +17,6 @@ export const Route = createFileRoute("/_authenticated/app")({
 });
 
 const NAV = [
-  { to: "/app/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { to: "/app/feed", label: "Feed", icon: Rss },
   { to: "/app/showcase", label: "Showcase", icon: Sparkles },
   { to: "/app/ideas", label: "Post Idea", icon: Lightbulb },
@@ -29,6 +28,7 @@ const NAV = [
   { to: "/app/leaderboard", label: "Leaderboard", icon: Trophy },
   { to: "/app/hall", label: "Hall of Fame", icon: Award },
   { to: "/app/profile", label: "Profile", icon: User },
+  { to: "/app/dashboard", label: "Dashboard", icon: LayoutDashboard },
 ] as const;
 
 function AppShell() {
