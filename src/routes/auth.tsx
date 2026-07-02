@@ -94,6 +94,7 @@ function AuthPage() {
           </span>
         </Link>
 
+        
         <div className="glass-strong rounded-2xl p-6 sm:p-8 shadow-elegant">
           <h1 className="font-display text-2xl font-bold text-center">
             {mode === "signup" ? "Join the Forge" : mode === "forgot" ? "Reset password" : "Welcome back"}
@@ -107,8 +108,8 @@ function AuthPage() {
           </p>
 
           {mode !== "forgot" && (
-            <>
-              <Button
+          {/*  <>
+             <Button
                 type="button"
                 variant="glass"
                 size="lg"
@@ -130,7 +131,7 @@ function AuthPage() {
                 <span className="text-xs text-muted-foreground uppercase tracking-wider">or</span>
                 <div className="h-px flex-1 bg-border" />
               </div>
-            </>
+            </>*/}
           )}
 
           <form onSubmit={handleEmail} className="space-y-4">
