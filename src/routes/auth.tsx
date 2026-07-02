@@ -106,9 +106,9 @@ function AuthPage() {
                 ? "We'll email you a reset link."
                 : "Sign in to continue building."}
           </p>
-
+{/* 
           {mode !== "forgot" && (
-          {/*  <>
+           <>
              <Button
                 type="button"
                 variant="glass"
@@ -131,9 +131,9 @@ function AuthPage() {
                 <span className="text-xs text-muted-foreground uppercase tracking-wider">or</span>
                 <div className="h-px flex-1 bg-border" />
               </div>
-            </>*/}
+            </>
           )}
-
+*/}
           <form onSubmit={handleEmail} className="space-y-4">
             {mode === "signup" && (
               <div className="space-y-1.5">
