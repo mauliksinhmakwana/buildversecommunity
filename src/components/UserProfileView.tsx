@@ -170,26 +170,15 @@ export function UserProfileView({ userId }: { userId: string }) {
         {posts.length === 0 ? <p className="text-sm text-muted-foreground">No posts yet.</p> : (
           <div className="space-y-3">
             {posts.map((post) => (
-              <article key={post.id} className="glass-strong rounded-2xl p-4 relative">
-                {isMe && (
-                  <div className="absolute top-3 right-3">
-                    <button onClick={() => setMenuOpen(menuOpen === post.id ? null : post.id)} className="p-1.5 rounded hover:bg-muted">
-                      <MoreVertical className="h-4 w-4" />
-                    </button>
-                    {menuOpen === post.id && (
-                      <div className="absolute right-0 top-9 glass-strong rounded-lg p-1 shadow-lg z-10 min-w-32">
-                        <button onClick={() => { setEditingPost(post); setMenuOpen(null); }} className="w-full text-left px-3 py-1.5 text-sm rounded hover:bg-muted flex items-center gap-2"><Pencil className="h-3.5 w-3.5" />Edit</button>
-                        <button onClick={() => deletePost(post.id)} className="w-full text-left px-3 py-1.5 text-sm rounded hover:bg-muted flex items-center gap-2 text-destructive"><Trash2 className="h-3.5 w-3.5" />Delete</button>
-                      </div>
-                    )}
-                  </div>
-                )}
-                <div className="text-[10px] uppercase tracking-wider text-primary">{post.type}</div>
-                {post.title && <h3 className="font-semibold mt-1">{post.title}</h3>}
-                <p className="text-sm whitespace-pre-wrap mt-1">{post.body}</p>
-                {post.media_urls?.[0] && <img src={post.media_urls[0]} alt="" className="w-full max-h-80 object-cover rounded-lg mt-2" />}
-                <div className="text-xs text-muted-foreground mt-2">❤ {post.votes_count} · 💬 {post.comments_count} · {new Date(post.created_at).toLocaleDateString()}</div>
-              </article>
+              <PostCard
+                key={post.id}
+                post={post}
+                isMine={isMe}
+                menuOpen={menuOpen === post.id}
+                onToggleMenu={() => setMenuOpen(menuOpen === post.id ? null : post.id)}
+                onEdit={() => { setEditingPost(post); setMenuOpen(null); }}
+                onDelete={() => deletePost(post.id)}
+              />
             ))}
           </div>
         )}
