@@ -96,7 +96,9 @@ function Challenges() {
 
       <div className="flex gap-2">
         {(["upcoming", "ongoing", "past"] as const).map((t) => (
-          <button key={t} onClick={() => setTab(t)} className={cn("px-4 py-1.5 rounded-full text-sm capitalize border transition", tab === t ? "bg-primary text-primary-foreground border-primary" : "border-border hover:bg-muted")}>{t}</button>
+          <button key={t} onClick={() => { setTab(t); setTabTouched(true); }} className={cn("px-4 py-1.5 rounded-full text-sm capitalize border transition", tab === t ? "bg-primary text-primary-foreground border-primary" : "border-border hover:bg-muted")}>{t}</button>
+        ))}
+      </div>
         ))}
       </div>
 
