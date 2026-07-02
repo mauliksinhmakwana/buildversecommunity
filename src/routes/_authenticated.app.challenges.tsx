@@ -14,25 +14,51 @@ export const Route = createFileRoute("/_authenticated/app/challenges")({
 });
 
 type C = { id: string; title: string; description: string | null; cover_url: string | null; status: "upcoming" | "ongoing" | "past"; starts_at: string | null; ends_at: string | null };
+type P = { id: string; display_name: string | null; avatar_url: string | null };
 
 function Challenges() {
   const { user } = useAuth();
   const [list, setList] = useState<C[]>([]);
   const [enrolled, setEnrolled] = useState<Set<string>>(new Set());
   const [counts, setCounts] = useState<Record<string, number>>({});
+  const [avatars, setAvatars] = useState<Record<string, P[]>>({});
   const [tab, setTab] = useState<"upcoming" | "ongoing" | "past">("ongoing");
+  const [tabTouched, setTabTouched] = useState(false);
   const [open, setOpen] = useState(false);
   const [form, setForm] = useState({ title: "", description: "" });
 
   async function load() {
     const { data } = await supabase.from("challenges").select("*").order("created_at", { ascending: false });
-    setList((data as never) ?? []);
+    const chals = ((data as C[]) ?? []);
+    setList(chals);
     const { data: enr } = await supabase.from("challenge_enrollments").select("challenge_id, user_id");
     const rows = ((enr as { challenge_id: string; user_id: string }[]) ?? []);
     const c: Record<string, number> = {};
-    rows.forEach((r) => { c[r.challenge_id] = (c[r.challenge_id] ?? 0) + 1; });
+    const byChal: Record<string, string[]> = {};
+    rows.forEach((r) => {
+      c[r.challenge_id] = (c[r.challenge_id] ?? 0) + 1;
+      (byChal[r.challenge_id] ??= []).push(r.user_id);
+    });
     setCounts(c);
     if (user) setEnrolled(new Set(rows.filter((r) => r.user_id === user.id).map((r) => r.challenge_id)));
+
+    const allIds = Array.from(new Set(rows.map((r) => r.user_id)));
+    if (allIds.length) {
+      const { data: ps } = await supabase.from("profiles").select("id, display_name, avatar_url").in("id", allIds);
+      const pmap = new Map(((ps as P[]) ?? []).map((p) => [p.id, p]));
+      const av: Record<string, P[]> = {};
+      Object.entries(byChal).forEach(([cid, uids]) => {
+        av[cid] = uids.slice(0, 5).map((u) => pmap.get(u)).filter(Boolean) as P[];
+      });
+      setAvatars(av);
+    }
+
+    // auto-select the first tab that has content
+    if (!tabTouched) {
+      const order: ("ongoing" | "upcoming" | "past")[] = ["ongoing", "upcoming", "past"];
+      const first = order.find((t) => chals.some((x) => x.status === t));
+      if (first) setTab(first);
+    }
   }
   useEffect(() => { load(); }, [user?.id]);
 
