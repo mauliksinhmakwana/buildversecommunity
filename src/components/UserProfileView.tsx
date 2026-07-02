@@ -212,3 +212,120 @@ function Section({ title, children }: { title: string; children: React.ReactNode
 function Pill({ children }: { children: React.ReactNode }) {
   return <span className="px-2.5 py-1 rounded-full text-sm bg-muted capitalize">{children}</span>;
 }
+
+type Comment = { id: string; user_id: string; body: string; created_at: string; profile?: { display_name: string | null; avatar_url: string | null } };
+
+function PostCard({ post, isMine, menuOpen, onToggleMenu, onEdit, onDelete }: {
+  post: Post; isMine: boolean; menuOpen: boolean;
+  onToggleMenu: () => void; onEdit: () => void; onDelete: () => void;
+}) {
+  const { user } = useAuth();
+  const [liked, setLiked] = useState(false);
+  const [likes, setLikes] = useState(post.votes_count);
+  const [comments, setComments] = useState<Comment[]>([]);
+  const [commentCount, setCommentCount] = useState(post.comments_count);
+  const [showComments, setShowComments] = useState(false);
+  const [draft, setDraft] = useState("");
+  const [busy, setBusy] = useState(false);
+
+  useEffect(() => {
+    if (!user) return;
+    supabase.from("post_votes").select("user_id").eq("post_id", post.id).eq("user_id", user.id).maybeSingle()
+      .then(({ data }) => setLiked(!!data));
+  }, [post.id, user?.id]);
+
+  async function toggleLike() {
+    if (!user || busy) return;
+    setBusy(true);
+    if (liked) {
+      const { error } = await supabase.from("post_votes").delete().eq("post_id", post.id).eq("user_id", user.id);
+      if (!error) { setLiked(false); setLikes((n) => Math.max(0, n - 1)); }
+      else toast.error(error.message);
+    } else {
+      const { error } = await supabase.from("post_votes").insert({ post_id: post.id, user_id: user.id });
+      if (!error) { setLiked(true); setLikes((n) => n + 1); }
+      else toast.error(error.message);
+    }
+    setBusy(false);
+  }
+
+  async function openComments() {
+    const next = !showComments;
+    setShowComments(next);
+    if (next && comments.length === 0) {
+      const { data } = await supabase.from("post_comments").select("id, user_id, body, created_at").eq("post_id", post.id).order("created_at");
+      const rows = (data as Comment[]) ?? [];
+      const ids = Array.from(new Set(rows.map((r) => r.user_id)));
+      if (ids.length) {
+        const { data: ps } = await supabase.from("profiles").select("id, display_name, avatar_url").in("id", ids);
+        const map = new Map((ps ?? []).map((p) => [p.id, p as { display_name: string | null; avatar_url: string | null; id: string }]));
+        rows.forEach((r) => { r.profile = map.get(r.user_id); });
+      }
+      setComments(rows);
+    }
+  }
+
+  async function addComment() {
+    if (!user || !draft.trim()) return;
+    const body = draft.trim();
+    setDraft("");
+    const { data, error } = await supabase.from("post_comments").insert({ post_id: post.id, user_id: user.id, body }).select("id, user_id, body, created_at").single();
+    if (error) { toast.error(error.message); setDraft(body); return; }
+    const { data: prof } = await supabase.from("profiles").select("display_name, avatar_url").eq("id", user.id).maybeSingle();
+    setComments((c) => [...c, { ...(data as Comment), profile: prof ?? undefined }]);
+    setCommentCount((n) => n + 1);
+  }
+
+  return (
+    <article className="glass-strong rounded-2xl p-4 relative">
+      {isMine && (
+        <div className="absolute top-3 right-3">
+          <button onClick={onToggleMenu} className="p-1.5 rounded hover:bg-muted">
+            <MoreVertical className="h-4 w-4" />
+          </button>
+          {menuOpen && (
+            <div className="absolute right-0 top-9 glass-strong rounded-lg p-1 shadow-lg z-10 min-w-32">
+              <button onClick={onEdit} className="w-full text-left px-3 py-1.5 text-sm rounded hover:bg-muted flex items-center gap-2"><Pencil className="h-3.5 w-3.5" />Edit</button>
+              <button onClick={onDelete} className="w-full text-left px-3 py-1.5 text-sm rounded hover:bg-muted flex items-center gap-2 text-destructive"><Trash2 className="h-3.5 w-3.5" />Delete</button>
+            </div>
+          )}
+        </div>
+      )}
+      <div className="text-[10px] uppercase tracking-wider text-primary">{post.type}</div>
+      {post.title && <h3 className="font-semibold mt-1">{post.title}</h3>}
+      <p className="text-sm whitespace-pre-wrap mt-1">{post.body}</p>
+      {post.media_urls?.[0] && <img src={post.media_urls[0]} alt="" className="w-full max-h-80 object-cover rounded-lg mt-2" />}
+      <div className="flex items-center gap-1 mt-3 text-sm">
+        <button onClick={toggleLike} disabled={!user || busy} className={cn("flex items-center gap-1.5 px-2.5 py-1 rounded-full hover:bg-muted transition", liked && "text-red-500")}>
+          <Heart className={cn("h-4 w-4", liked && "fill-current")} /> {likes}
+        </button>
+        <button onClick={openComments} className="flex items-center gap-1.5 px-2.5 py-1 rounded-full hover:bg-muted transition">
+          <MessageCircle className="h-4 w-4" /> {commentCount}
+        </button>
+        <span className="ml-auto text-xs text-muted-foreground">{new Date(post.created_at).toLocaleDateString()}</span>
+      </div>
+      {showComments && (
+        <div className="mt-3 pt-3 border-t border-border space-y-2">
+          {comments.map((c) => (
+            <div key={c.id} className="flex gap-2 text-sm">
+              <div className="h-7 w-7 rounded-full gradient-primary flex items-center justify-center overflow-hidden text-[10px] font-bold flex-shrink-0">
+                {c.profile?.avatar_url ? <img src={c.profile.avatar_url} alt="" className="h-full w-full object-cover" /> : (c.profile?.display_name ?? "?").slice(0,2).toUpperCase()}
+              </div>
+              <div className="flex-1 bg-muted rounded-2xl px-3 py-1.5">
+                <div className="text-xs font-semibold">{c.profile?.display_name ?? "User"}</div>
+                <div className="text-sm">{c.body}</div>
+              </div>
+            </div>
+          ))}
+          {user && (
+            <div className="flex gap-2 pt-1">
+              <Input placeholder="Write a comment…" value={draft} onChange={(e) => setDraft(e.target.value)} onKeyDown={(e) => e.key === "Enter" && addComment()} />
+              <Button size="sm" variant="hero" onClick={addComment} disabled={!draft.trim()}><Send className="h-3.5 w-3.5" /></Button>
+            </div>
+          )}
+          {comments.length === 0 && <p className="text-xs text-muted-foreground">No comments yet.</p>}
+        </div>
+      )}
+    </article>
+  );
+}
