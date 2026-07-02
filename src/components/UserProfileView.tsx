@@ -5,9 +5,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
-import { MapPin, Trophy, Flame, Youtube, Eye, EyeOff, Pencil, MoreVertical, Trash2, UserPlus, MessageCircle, Target } from "lucide-react";
+import { MapPin, Trophy, Flame, Youtube, Eye, EyeOff, Pencil, MoreVertical, Trash2, UserPlus, MessageCircle, Target, Heart, Send } from "lucide-react";
 import { toast } from "sonner";
 import { useAuth } from "@/lib/auth-context";
+import { cn } from "@/lib/utils";
 
 type Prof = {
   id: string; display_name: string | null; avatar_url: string | null; bio: string | null;
