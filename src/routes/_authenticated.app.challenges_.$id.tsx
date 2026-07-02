@@ -8,7 +8,7 @@ import { ArrowLeft, Users, CheckCircle2, Clock, Play, Calendar } from "lucide-re
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 
-export const Route = createFileRoute("/_authenticated/app/challenges/$id")({
+export const Route = createFileRoute("/_authenticated/app/challenges_/$id")({
   component: ChallengeDetail,
 });
 
