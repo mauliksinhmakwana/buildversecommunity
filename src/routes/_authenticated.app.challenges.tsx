@@ -99,8 +99,6 @@ function Challenges() {
           <button key={t} onClick={() => { setTab(t); setTabTouched(true); }} className={cn("px-4 py-1.5 rounded-full text-sm capitalize border transition", tab === t ? "bg-primary text-primary-foreground border-primary" : "border-border hover:bg-muted")}>{t}</button>
         ))}
       </div>
-        ))}
-      </div>
 
       <div className="grid sm:grid-cols-2 gap-4">
         {filtered.map((c) => (
@@ -112,12 +110,21 @@ function Challenges() {
               {c.starts_at && <span>Starts: {new Date(c.starts_at).toLocaleDateString()}</span>}
               {c.ends_at && <span>Ends: {new Date(c.ends_at).toLocaleDateString()}</span>}
             </div>
-            <div className="flex items-center justify-between mt-3">
-              <span className="text-xs flex items-center gap-1 text-muted-foreground"><Users className="h-3.5 w-3.5" />{counts[c.id] ?? 0} participants</span>
+            <div className="flex items-center justify-between mt-3 gap-2 flex-wrap">
+              <div className="flex items-center gap-2">
+                <div className="flex -space-x-2">
+                  {(avatars[c.id] ?? []).map((p) => (
+                    <div key={p.id} className="h-6 w-6 rounded-full ring-2 ring-background gradient-primary flex items-center justify-center overflow-hidden text-[9px] font-bold">
+                      {p.avatar_url ? <img src={p.avatar_url} alt="" className="h-full w-full object-cover" /> : (p.display_name ?? "?").slice(0,2).toUpperCase()}
+                    </div>
+                  ))}
+                </div>
+                <span className="text-xs flex items-center gap-1 text-muted-foreground"><Users className="h-3.5 w-3.5" />{counts[c.id] ?? 0}</span>
+              </div>
               <div className="flex gap-2">
-                <Link to="/app/challenges/$id" params={{ id: c.id }}><Button size="sm" variant="ghost">View</Button></Link>
+                <Link to="/app/challenges/$id" params={{ id: c.id }}><Button size="sm" variant="glass">View details</Button></Link>
                 {c.status !== "past" && (
-                  <Button size="sm" variant={enrolled.has(c.id) ? "glass" : "hero"} onClick={() => enroll(c.id)}>
+                  <Button size="sm" variant={enrolled.has(c.id) ? "ghost" : "hero"} onClick={() => enroll(c.id)}>
                     {enrolled.has(c.id) ? "Joined ✓" : "Participate"}
                   </Button>
                 )}
