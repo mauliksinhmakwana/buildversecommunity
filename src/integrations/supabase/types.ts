@@ -382,6 +382,69 @@ export type Database = {
         }
         Relationships: []
       }
+      phone_credentials: {
+        Row: {
+          created_at: string
+          failed_attempts: number
+          last_login_at: string | null
+          locked_until: string | null
+          phone: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          failed_attempts?: number
+          last_login_at?: string | null
+          locked_until?: string | null
+          phone: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          failed_attempts?: number
+          last_login_at?: string | null
+          locked_until?: string | null
+          phone?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      phone_otps: {
+        Row: {
+          attempts: number
+          code_hash: string
+          consumed_at: string | null
+          created_at: string
+          expires_at: string
+          id: string
+          phone: string
+          purpose: string
+        }
+        Insert: {
+          attempts?: number
+          code_hash: string
+          consumed_at?: string | null
+          created_at?: string
+          expires_at: string
+          id?: string
+          phone: string
+          purpose: string
+        }
+        Update: {
+          attempts?: number
+          code_hash?: string
+          consumed_at?: string | null
+          created_at?: string
+          expires_at?: string
+          id?: string
+          phone?: string
+          purpose?: string
+        }
+        Relationships: []
+      }
       post_comments: {
         Row: {
           body: string
